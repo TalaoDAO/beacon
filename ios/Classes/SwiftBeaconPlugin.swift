@@ -18,7 +18,7 @@ public class SwiftBeaconPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "startBeacon":
-            BeaconChannelHandler.shared.startBeacon(result: result)
+            BeaconChannelHandler.shared.startBeacon(call: call, result: result)
         case "pair":
             BeaconChannelHandler.shared.pair(call: call, result: result)
         case "addPeer":

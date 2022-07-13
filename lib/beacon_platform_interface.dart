@@ -29,8 +29,8 @@ abstract class BeaconPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Initialize beacon
-  Future<Map> startBeacon() async {
+  /// Initialize beacon with walletName
+  Future<Map> startBeacon({required String walletName}) async {
     throw UnimplementedError('startBeacon() has not been implemented.');
   }
 

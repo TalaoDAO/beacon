@@ -67,7 +67,8 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
             "startBeacon" -> {
-                startBeacon(result)
+                val walletName: String = call.argument("walletName") ?: "Altme"
+                startBeacon(walletName, result)
             }
             "tezosResponse" ->
                 tezosResponse(call, result)
@@ -257,10 +258,10 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
 
     private var publisher = MutableSharedFlow<BeaconRequest>()
 
-    private fun startBeacon(result: Result) {
+    private fun startBeacon(walletName: String, result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
             beaconClient?.stop()
-            beaconClient = BeaconWalletClient("Altme") {
+            beaconClient = BeaconWalletClient(walletName) {
                 support(tezos(), substrate())
                 use(p2pMatrix())
 

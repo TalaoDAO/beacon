@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final TextEditingController pairingRequestController = TextEditingController(
       text:
-          "GUsRsanpcKzCCdgKbsPwfdBox7V5p8QHacusGQnEVV3sXaCmjzFuE81sa8ZoraHEomN47W9WxNXmGCKTSNpXFjSK5oAjMHjwks4BDu1J5RMZxApmAqbL1cLArJpV4r9bz2TtSKwrGcyQAJg7ZJFKaynNnz5pfWb6CBW7VG4zEY2mbtsD2xD7b1uQqGEcr6DiTtMBNvdiutnKZAEUmm6yJ2igCfg1oxgk2Kt7ggJucDNsurUYxJeZdEH3kaTHkH1SxgqVawWQg6QqH2CSpjCyJf7MdBQu7dvtyWNGemJybe9Uz8GVYrrMqHsaG6RjE9FfH6YVhBx4X4Ww");
+          "MyC1y84vtfxw5YyqFwBnvdkW3Zcwd58QhnMQfx9ekPDVFbx2XQbUZPVfQ22vDTjWD9amVvJjv57qDZr37qxKdZF4Yv7yChhzaBvAX8kX7DDxM18XRAT3zhwNo7cWXYWrxmyweC6daQJ7tPhetaTLswS4EkVm7C7cWDfVWUPZQAXh5kjmpHtULbykNMK8XmtpyE8oGo39efpP3xcDTeEhyLU8Pdfc4KeVTEeWVDBPP1aeouwcdZ1LWL16ibdxbKxVPe6NmFEYS5LhS1yAyfNyqBHcnS9t8EVvqkwcXH2cYU1Ka9weeQGfv8XhRztSC2AMp");
 
   bool hasPeers = false;
 
@@ -51,7 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   startBeacon() async {
-    final Map response = await _beaconPlugin.startBeacon();
+    final Map response =
+        await _beaconPlugin.startBeacon(walletName: "Altme Wallet");
     setState(() {
       hasPeers = json.decode(response['success'].toString());
     });

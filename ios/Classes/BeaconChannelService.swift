@@ -17,7 +17,7 @@ class BeaconConnectService{
     
     let publisher = PassthroughSubject<BeaconRequest<Tezos>, Never>()
     
-    func startBeacon() -> AnyPublisher<Void, Error>  {
+    func startBeacon(walletName: String) -> AnyPublisher<Void, Error>  {
         return Future<Void, Error> { [self] (promise) in
             do { 
                 guard beaconClient == nil else {
@@ -27,7 +27,7 @@ class BeaconConnectService{
                 
                 Beacon.WalletClient.create(
                     with: .init(
-                        name: "Altme",
+                        name: walletName,
                         blockchains: [Tezos.factory, Substrate.factory],
                         connections: [try Transport.P2P.Matrix.connection()]
                     )

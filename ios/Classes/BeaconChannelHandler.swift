@@ -14,8 +14,10 @@ class BeaconChannelHandler: NSObject {
     
     private var cancelBag = Set<AnyCancellable>()
     
-    func startBeacon(result: @escaping FlutterResult) {
-        BeaconConnectService.shared.startBeacon()
+    func startBeacon(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let args: NSDictionary = call.arguments as! NSDictionary
+        let walletName: String = args["walletName"] as! String
+        BeaconConnectService.shared.startBeacon(walletName: walletName)
             .sink(receiveCompletion: {  _ in
                 result([
                     "success": false

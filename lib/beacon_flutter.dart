@@ -14,8 +14,8 @@ import 'package:base_codecs/base_codecs.dart';
 /// Provide Beacon API for both Android and iOS.
 class Beacon {
   /// Initialize beacon
-  Future<Map> startBeacon() async {
-    return await BeaconPlatform.instance.startBeacon();
+  Future<Map> startBeacon({required String walletName}) async {
+    return await BeaconPlatform.instance.startBeacon(walletName: walletName);
   }
 
   /// Pair wallet with dApp using [pairingRequest]

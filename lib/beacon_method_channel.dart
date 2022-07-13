@@ -20,10 +20,12 @@ class MethodChannelBeacon extends BeaconPlatform {
   @visibleForTesting
   final eventChannel = const EventChannel('beaconEvent');
 
-  /// Initialize beacon
+  /// Initialize beacon with walletName
   @override
-  Future<Map> startBeacon() async {
-    Map data = await methodChannel.invokeMethod('startBeacon');
+  Future<Map> startBeacon({required String walletName}) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("walletName", () => walletName);
+    Map data = await methodChannel.invokeMethod('startBeacon', args);
     return data;
   }
 
