@@ -15,7 +15,12 @@ A new Flutter plugin.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '9.0'
+  s.dependency 'BeaconBlockchainSubstrate'
+  s.dependency 'BeaconBlockchainTezos'
+  s.dependency 'BeaconClientWallet'
+  s.dependency 'BeaconCore'
+  s.dependency 'BeaconTransportP2PMatrix'
+  s.platform = :ios, '13.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
