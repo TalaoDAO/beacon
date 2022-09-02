@@ -3,7 +3,7 @@ package io.altme.beacon.beacon
 import android.util.Log
 import com.google.gson.Gson
 import androidx.annotation.NonNull
-import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -47,9 +47,9 @@ class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandle
  
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "beaconMethod")
-        methodChannel.setMethodCallHandler(this)
+        methodChannel?.setMethodCallHandler(this)
         eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "beaconEvent")
-        eventChannel.setStreamHandler(this)
+        eventChannel?.setStreamHandler(this)
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -73,8 +73,8 @@ class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandle
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        methodChannel.setMethodCallHandler(null)
-        eventChannel.setStreamHandler(null)
+        methodChannel?.setMethodCallHandler(null)
+        eventChannel?.setStreamHandler(null)
     }
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
