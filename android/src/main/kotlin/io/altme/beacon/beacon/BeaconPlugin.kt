@@ -38,7 +38,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** BeaconPlugin */
+/** BeaconPlugin */ 
 class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandler{ 
     private val tag = "BeaconPlugin"
     
@@ -212,6 +212,5 @@ class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandle
             network,
             client,
         )
-    }
+    } 
 }
-
