@@ -42,14 +42,14 @@ import kotlinx.coroutines.withContext
 class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandler{ 
     private val tag = "BeaconPlugin"
     
-    private var methodChannel: MethodChannel? = null
-    private var eventChannel: EventChannel? = null
+    private lateinit var methodChannel: MethodChannel
+    private lateinit var eventChannel: EventChannel
  
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "beaconMethod")
-        methodChannel?.setMethodCallHandler(this)
+        methodChannel.setMethodCallHandler(this)
         eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "beaconEvent")
-        eventChannel?.setStreamHandler(this)
+        eventChannel.setStreamHandler(this)
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -73,8 +73,8 @@ class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandle
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        methodChannel?.setMethodCallHandler(null)
-        eventChannel?.setStreamHandler(null)
+        methodChannel.setMethodCallHandler(null)
+        eventChannel.setStreamHandler(null)
     }
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
