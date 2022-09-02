@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
+import 'dart:convert';
 
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:beacon/beacon.dart';
 
 void main() {
@@ -16,46 +15,148 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   final _beaconPlugin = Beacon();
+
+  final TextEditingController pairingRequestController = TextEditingController(
+      text:
+          "GUsRsanpcKwo4t53chv9Gar7xV6B42o4behDHwpmZYFF76U6RFCGj3Aka2E8zSEV8GTYiG55fAWJ1jCnVyfxuTRw3JbtYMBu47FKW2NCk8sSNNYUiPTHvnZeQkRGEzvnsgKsP33S7AD5X66XgJDcHZHkMwTNK5SWnchnERyAMgBywxpCAVtUph91PEGUbMK61VfxB76M8ynDfhtgL3yUPkoSf9mtzioQtrKqRStv1M9FJMjqGegy7MV727oEB9KsKrtk6nsESW9TVpsvKALFhRwYAk7km3XNcgyrmJaZ8M15g8Q9KDSZL7LWWKg8if2EPU1AXwxsvrPx");
+
+  bool hasPeers = false;
+
+  String value = '';
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startBeacon();
+    });
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _beaconPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
+  startBeacon() async {
+    final Map response = await _beaconPlugin.startBeacon();
     setState(() {
-      _platformVersion = platformVersion;
+      hasPeers = json.decode(response['success'].toString());
     });
+    getBeaconResponse();
+  }
+
+  void getBeaconResponse() {
+    _beaconPlugin.getBeaconResponse().listen(
+      (data) {
+        setState(() {
+          value = data.toString();
+        });
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter Beacon Demo'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              Container(
+                alignment: Alignment.centerLeft,
+                child: const Text('Pairing Request: '),
+              ),
+              TextField(
+                controller: pairingRequestController,
+                maxLines: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: !hasPeers
+                        ? null
+                        : () async {
+                            final Map response =
+                                await _beaconPlugin.removePeers();
+
+                            setState(() {
+                              bool success =
+                                  json.decode(response['success'].toString());
+                              hasPeers = !success;
+                            });
+
+                            if (!hasPeers) {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Successfully disconnected.'),
+                              ));
+                            }
+                          },
+                    child: const Text('Unpair'),
+                  ),
+                  ElevatedButton(
+                    onPressed: hasPeers
+                        ? null
+                        : () async {
+                            final Map response = await _beaconPlugin.pair(
+                              pairingRequest: pairingRequestController.text,
+                            );
+
+                            setState(() {
+                              bool success =
+                                  json.decode(response['success'].toString());
+                              hasPeers = success;
+                            });
+
+                            if (hasPeers) {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Successfully paired.'),
+                              ));
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Failed to pair.'),
+                              ));
+                            }
+                          },
+                    child: const Text('Pair'),
+                  ),
+                ],
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: value.isEmpty
+                      ? null
+                      : () async {
+                          setState(() {
+                            value = '';
+                          });
+                          await _beaconPlugin.respondExample();
+                        },
+                  child: const Text('Respond'),
+                ),
+              ),
+              const Divider(),
+              const SizedBox(height: 10),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: const Text('Beacon Response: '),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  value,
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
