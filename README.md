@@ -1,6 +1,6 @@
 # Beacon Flutter Plugin
 
-[![pub package](https://img.shields.io/github/v/tag/airgap-it/beacon-android-sdk?label=stable&sort=semver)](https://pub.dev/packages/beacon_flutter)
+[![pub package](https://img.shields.io/badge/pub-v0.0.2-blue)](https://pub.dev/packages/beacon_flutter)
 
 > Connect Wallets with dApps on Tezos
 
@@ -203,8 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
 ```
 # Reference
 
-[Android SDK](https://github.com/airgap-it/beacon-android-sdk)
-[IOS SDK](https://github.com/airgap-it/beacon-ios-sdk)
-[Naan](https://github.com/Tezsure/naan-wallet-1.0)
-[Autonomy](https://github.com/bitmark-inc/autonomy-client)
+-[Android SDK](https://github.com/airgap-it/beacon-android-sdk)
+-[IOS SDK](https://github.com/airgap-it/beacon-ios-sdk)
+-[Naan](https://github.com/Tezsure/naan-wallet-1.0)
+-[Autonomy](https://github.com/bitmark-inc/autonomy-client)
 
