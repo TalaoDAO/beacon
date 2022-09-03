@@ -203,8 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
 ```
 # Reference
 
-[Android SDK](https://github.com/airgap-it/beacon-android-sdk)- an SDK for Android developers (wallet)
-[IOS SDK](https://github.com/airgap-it/beacon-ios-sdk)- an SDK for iOS developers (wallet)
-[Naan](https://github.com/Tezsure/naan-wallet-1.0) 
+[Beacon Android SDK](https://github.com/airgap-it/beacon-android-sdk)
+[Beacon IOS SDK](https://github.com/airgap-it/beacon-ios-sdk)
+[Naan](https://github.com/Tezsure/naan-wallet-1.0)
 [Autonomy](https://github.com/bitmark-inc/autonomy-client)
 
