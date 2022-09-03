@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /** BeaconPlugin */ 
-class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandler{ 
+class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandler, FlutterPlugin{
     private val tag = "BeaconPlugin"
     
     private lateinit var methodChannel: MethodChannel
@@ -168,7 +168,7 @@ class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandle
         }
     }
 
-    private fun pair(pairingRequest: String, result: Result) {
+    private fun pair(pairingRequest: String, result: Result) { 
         CoroutineScope(Dispatchers.IO).launch {
             beaconClient?.pair(pairingRequest)
             val peers = beaconClient?.getPeers()

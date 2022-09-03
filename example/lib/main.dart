@@ -7,19 +7,36 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Beacon Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Flutter Beacon Demo Page'),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   final _beaconPlugin = Beacon();
 
   final TextEditingController pairingRequestController = TextEditingController(
       text:
-          "GUsRsanpcKwo4t53chv9Gar7xV6B42o4behDHwpmZYFF76U6RFCGj3Aka2E8zSEV8GTYiG55fAWJ1jCnVyfxuTRw3JbtYMBu47FKW2NCk8sSNNYUiPTHvnZeQkRGEzvnsgKsP33S7AD5X66XgJDcHZHkMwTNK5SWnchnERyAMgBywxpCAVtUph91PEGUbMK61VfxB76M8ynDfhtgL3yUPkoSf9mtzioQtrKqRStv1M9FJMjqGegy7MV727oEB9KsKrtk6nsESW9TVpsvKALFhRwYAk7km3XNcgyrmJaZ8M15g8Q9KDSZL7LWWKg8if2EPU1AXwxsvrPx");
+          "GUsRsanpcL1ZF7NQs926ZxtLxMrNaUQwTo8FF5TyKqP5VB9rsZavQ31GitaYHnzWtsLLShs3wZ821xnS8PqksZgjMQbep42xohqGSH3hwWXRZMF5GridgMRgkxaXtMxDtNmHxDxWcipZX1FcJ2Kocq6YQ7DFosyXWd6edAvAhngD86xTLbbm4QMxz4gpd1VMUp5bYsNVHJFaSpcRTjnRsbnHj5vtkRW3wUtXtTA5bqj9qqRrf9CqkpYtq6XXVV7vivpZCho2VSs6756bccMwkaGAgK5FBbcbpDGmiX6XNttKK8a9RCN7XHw8svSoGJCTA3LDNQhNF1VM");
 
   bool hasPeers = false;
 
