@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:beacon_flutter/beacon_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:beacon/beacon.dart';
 
 void main() {
   runApp(const MyApp());

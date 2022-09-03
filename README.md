@@ -1,4 +1,4 @@
-# beacon
+# beacon_flutter
 
 A new Flutter plugin.
 
