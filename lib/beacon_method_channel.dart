@@ -20,6 +20,7 @@ class MethodChannelBeacon extends BeaconPlatform {
   @override
   Future<Map> pair({required String pairingRequest}) async {
     Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("pairingRequest", () => pairingRequest);
     Map data = await methodChannel.invokeMethod('pair', args);
     return data;
   }
