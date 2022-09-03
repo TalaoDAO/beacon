@@ -12,7 +12,7 @@ public class SwiftBeaconPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         let eventChannel = FlutterEventChannel(name: "beaconEvent", binaryMessenger: registrar.messenger())
         
         registrar.addMethodCallDelegate(instance, channel: methodChannel)
-        eventChannel.setStreamHandler(instance)
+        eventChannel.setStreamHandler(BeaconChannelHandler.shared)
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

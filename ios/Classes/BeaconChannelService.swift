@@ -90,7 +90,7 @@ class BeaconConnectService{
     private func onBeaconRequest(result: Result<BeaconRequest<Tezos>, Beacon.Error>) {
         switch result {
         case let .success(request):
-            print("Sending response from wallet")
+            print("Sending response from dApp")
             self.awaitingRequest = request
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
@@ -147,7 +147,7 @@ class BeaconConnectService{
                 beaconClient?.respond(with: try response(from: request)) { result in
                     switch result {
                     case .success(_):
-                        print("Sent the response from dApp")
+                        print("Sent the response from wallet")
                         completion(.success(()))
                     case let .failure(error):
                         print("Failed to send the response, got error: \(error)")
