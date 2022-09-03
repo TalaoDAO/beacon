@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.version          = '0.0.1'
   s.summary          = 'A new Flutter plugin.'
   s.description      = <<-DESC
-A new Flutter plugin.
+A new Flutter beacon plugin.
                        DESC
   s.homepage         = 'https://github.com/TalaoDAO/beacon'
   s.license          = { :file => '../LICENSE' }
