@@ -1,6 +1,6 @@
 # Beacon Flutter Plugin
 
-[![pub package](https://img.shields.io/badge/pub-v0.0.2-blue)](https://pub.dev/packages/beacon_flutter)
+[![pub package](https://img.shields.io/github/v/tag/TalaoDAO/beacon?label=pub)](https://pub.dev/packages/beacon_flutter)
 
 > Connect Wallets with dApps on Tezos
 
