@@ -12,9 +12,12 @@ The `Beacon Flutter Plugin` provides Flutter developers with tools useful for se
 
 # Platform Support
 
-| Android | iOS  | 
-|---------|------|
-|    ✔️    |   ✔️  | 
+| Android | iOS  | MacOS | Web  | Linux | Windows  | 
+|---------|------|-------|------|-------|----------|
+|    ✔️    |   ✔️  |   x   |   x  |   x   |    x     | 
+
+# iOS Setup
+iOS 14 and newer. Reason: Beacon iOS SDK
 
 ## Example
 ```dart
