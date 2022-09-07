@@ -126,14 +126,12 @@ class BeaconConnectService{
     func addPeer(pairingRequest: String) -> AnyPublisher<Beacon.P2PPeer, Error> {
         return  Future<Beacon.P2PPeer, Error> { [self] (promise) in
             do {
-                guard let message = URLComponents(string: pairingRequest)?.queryItems?.first(where: { $0.name == "data" })?.value,
-                      let messageData = Base58.base58CheckDecode(message) else {
+                guard let messageData = Base58.base58CheckDecode(pairingRequest) else {
                     throw AppError.invalidPairingRequest
                 }
                 
-                let decoder = JSONDecoder()
                 let data = Data(messageData)
-                guard let peer = try? decoder.decode(Beacon.P2PPeer.self, from: data) else {
+                guard let peer = try? JSONDecoder().decode(Beacon.P2PPeer.self, from: data) else {
                     throw AppError.invalidPairingRequest
                 }
                 

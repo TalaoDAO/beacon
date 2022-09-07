@@ -16,16 +16,16 @@ class BeaconChannelHandler: NSObject {
     
     func startBeacon(result: @escaping FlutterResult) {
         BeaconConnectService.shared.startBeacon()
-        .sink(receiveCompletion: {  _ in
-            result([
-                "success": false
-            ])
-        }, receiveValue: { _ in
-            result([
-                "success": true
-            ])
-        })
-        .store(in: &cancelBag)
+            .sink(receiveCompletion: {  _ in
+                result([
+                    "success": false
+                ])
+            }, receiveValue: { _ in
+                result([
+                    "success": true
+                ])
+            })
+            .store(in: &cancelBag)
     }
     
     func pair(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -48,15 +48,15 @@ class BeaconChannelHandler: NSObject {
     func addPeer(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let args: NSDictionary = call.arguments as! NSDictionary
         let link: String = args["pairingRequest"] as! String
-
+        
         BeaconConnectService.shared.addPeer(pairingRequest: link)
             .tryMap { try JSONEncoder().encode($0) }
             .map { String(data: $0, encoding: .utf8) }
             .sink(receiveCompletion: {  (completion) in
-                    result([
-                        "success": false,
-                        "message": "Failed to addd peer"
-                    ])
+                result([
+                    "success": false,
+                    "message": "Failed to addd peer"
+                ])
             }, receiveValue: { serializedPeer in
                 result([
                     "success": true,
