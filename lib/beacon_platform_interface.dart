@@ -51,4 +51,8 @@ abstract class BeaconPlatform extends PlatformInterface {
   Future<Map> stop() {
     throw UnimplementedError('stop() has not been implemented.');
   }
+
+  Future<Map> pairingRequestToP2P({required String pairingRequest}) {
+    throw UnimplementedError('pairingRequestToP2P() has not been implemented.');
+  }
 }

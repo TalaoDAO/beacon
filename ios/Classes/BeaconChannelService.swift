@@ -135,11 +135,7 @@ class BeaconConnectService{
                     throw AppError.invalidPairingRequest
                 }
                 
-                guard let beaconClient = self.beaconClient else {
-                    throw AppError.pendingBeaconClient
-                }
-                
-                beaconClient.add([.p2p(peer)]) { result in
+                self.beaconClient?.add([.p2p(peer)]) { result in
                     switch result {
                     case .success(_):
                         print("Peers added \(peer) ")
@@ -220,6 +216,28 @@ class BeaconConnectService{
                     print("Failed to disconnect, got error: \(error)")
                     promise(.failure(error))
                 }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func pairingRequestToP2P(pairingRequest: String) -> AnyPublisher<Beacon.P2PPeer, Error> {
+        return  Future<Beacon.P2PPeer, Error> { [] (promise) in
+            do {
+                guard let messageData = Base58.base58CheckDecode(pairingRequest) else {
+                    throw AppError.invalidPairingRequest
+                }
+                
+                let data = Data(messageData)
+                guard let peer = try? JSONDecoder().decode(Beacon.P2PPeer.self, from: data) else {
+                    throw AppError.invalidPairingRequest
+                }
+                
+                promise(.success(peer))
+                
+            } catch {
+                print("Error: \(error)")
+                promise(.failure(error))
             }
         }
         .eraseToAnyPublisher()

@@ -36,4 +36,9 @@ class Beacon {
   Future<Map> stop() {
     return BeaconPlatform.instance.stop();
   }
+
+  Future<Map> pairingRequestToP2P({required String pairingRequest}) {
+    return BeaconPlatform.instance
+        .pairingRequestToP2P(pairingRequest: pairingRequest);
+  }
 }

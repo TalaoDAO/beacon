@@ -67,4 +67,12 @@ class MethodChannelBeacon extends BeaconPlatform {
     Map data = await methodChannel.invokeMethod('stop');
     return data;
   }
+
+  @override
+  Future<Map> pairingRequestToP2P({required String pairingRequest}) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("pairingRequest", () => pairingRequest);
+    Map data = await methodChannel.invokeMethod('pairingRequestToP2P', args);
+    return data;
+  }
 }
