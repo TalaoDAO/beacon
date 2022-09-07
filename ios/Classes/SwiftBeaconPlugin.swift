@@ -21,10 +21,18 @@ public class SwiftBeaconPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             BeaconChannelHandler.shared.startBeacon(result: result)
         case "pair":
             BeaconChannelHandler.shared.pair(call: call, result: result)
+        case "addPeer":
+            BeaconChannelHandler.shared.addPeer(call: call, result: result)
         case "removePeers":
             BeaconChannelHandler.shared.removePeers(result: result)
         case "respondExample":
             BeaconChannelHandler.shared.respondExample(result: result)
+        case "pause":
+            BeaconChannelHandler.shared.pause(result: result)
+        case "resume":
+            BeaconChannelHandler.shared.resume(result: result)
+        case "stop":
+            BeaconChannelHandler.shared.stop(result: result)
         default:
             result(FlutterMethodNotImplemented)
         }

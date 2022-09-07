@@ -45,6 +45,27 @@ class BeaconChannelHandler: NSObject {
             .store(in: &cancelBag)
     }
     
+    func addPeer(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let args: NSDictionary = call.arguments as! NSDictionary
+        let link: String = args["pairingRequest"] as! String
+
+        BeaconConnectService.shared.addPeer(pairingRequest: link)
+            .tryMap { try JSONEncoder().encode($0) }
+            .map { String(data: $0, encoding: .utf8) }
+            .sink(receiveCompletion: {  (completion) in
+                    result([
+                        "success": false,
+                        "message": "Failed to addd peer"
+                    ])
+            }, receiveValue: { serializedPeer in
+                result([
+                    "success": true,
+                    "peer": serializedPeer as Any
+                ])
+            })
+            .store(in: &cancelBag)
+    }
+    
     func removePeers(result: @escaping FlutterResult) {
         BeaconConnectService.shared.removePeers()
             .sink(receiveCompletion: { _ in
@@ -66,6 +87,50 @@ class BeaconChannelHandler: NSObject {
             ])
         })
     }
+    
+    func pause(result: @escaping FlutterResult) {
+        BeaconConnectService.shared.pause()
+            .sink(receiveCompletion: { _ in
+                result([
+                    "success": false
+                ])
+            }, receiveValue: { _ in
+                result([
+                    "success": true
+                ])
+            })
+            .store(in: &cancelBag)
+    }
+    
+    func resume(result: @escaping FlutterResult) {
+        BeaconConnectService.shared.resume()
+            .sink(receiveCompletion: { _ in
+                result([
+                    "success": false
+                ])
+            }, receiveValue: { _ in
+                result([
+                    "success": true
+                ])
+            })
+            .store(in: &cancelBag)
+    }
+    
+    func stop(result: @escaping FlutterResult) {
+        BeaconConnectService.shared.stop()
+            .sink(receiveCompletion: { _ in
+                result([
+                    "success": false
+                ])
+            }, receiveValue: { _ in
+                result([
+                    "success": true
+                ])
+            })
+            .store(in: &cancelBag)
+    }
+    
+    
 }
 
 extension BeaconChannelHandler: FlutterStreamHandler {

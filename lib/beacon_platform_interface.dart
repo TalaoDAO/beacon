@@ -24,6 +24,10 @@ abstract class BeaconPlatform extends PlatformInterface {
     throw UnimplementedError('pair() has not been implemented.');
   }
 
+  Future<Map> addPeer({required String pairingRequest}) {
+    throw UnimplementedError('addPeer() has not been implemented.');
+  }
+
   Future<Map> removePeers() {
     throw UnimplementedError('removePeers() has not been implemented.');
   }
@@ -34,5 +38,17 @@ abstract class BeaconPlatform extends PlatformInterface {
 
   Stream<String> getBeaconResponse() {
     throw UnimplementedError('getBeaconResponse() has not been implemented.');
+  }
+
+  Future<Map> pause() {
+    throw UnimplementedError('pause() has not been implemented.');
+  }
+
+  Future<Map> resume() {
+    throw UnimplementedError('resume() has not been implemented.');
+  }
+
+  Future<Map> stop() {
+    throw UnimplementedError('stop() has not been implemented.');
   }
 }

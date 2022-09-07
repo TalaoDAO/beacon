@@ -19,55 +19,55 @@ class BeaconConnectService{
     
     func startBeacon() -> AnyPublisher<Void, Error>  {
         return Future<Void, Error> { [self] (promise) in
-                do {
-                    beaconClient?.disconnect {
-                        print("disconnected \($0)")
-                    }
-                    
-                    Beacon.WalletClient.create(
-                        with: .init(
-                            name: "Altme",
-                            blockchains: [Tezos.factory, Substrate.factory],
-                            connections: [try Transport.P2P.Matrix.connection()]
-                        )
-                    ) { result in
-                        switch result {
-                        case let .success(client):
-                            print("Beacon client created")
-                            
-                            DispatchQueue.main.async {
-                                self.beaconClient = client
-                                self.listenForRequests()
-                                print("Fetching peers")
-                                self.beaconClient?.getPeers { result2 in
-                                    switch result2 {
-                                    case let .success(peers):
-                                        print("Peers fetched")
-                                        
-                                        if(peers.count > 0){
-                                          promise(.success(()))
-                                        }else{
-                                            print("Peer count is 0")
-                                            promise(.failure(Beacon.Error.missingPairedPeer))
-                                        }
-                                        
-                                    case let .failure(error):
-                                        print("Failed to fetch peers, got error: \(error)")
-                                        promise(.failure(error))
+            do {
+                beaconClient?.disconnect {
+                    print("disconnected \($0)")
+                }
+                
+                Beacon.WalletClient.create(
+                    with: .init(
+                        name: "Altme",
+                        blockchains: [Tezos.factory, Substrate.factory],
+                        connections: [try Transport.P2P.Matrix.connection()]
+                    )
+                ) { result in
+                    switch result {
+                    case let .success(client):
+                        print("Beacon client created")
+                        
+                        DispatchQueue.main.async {
+                            self.beaconClient = client
+                            self.listenForRequests()
+                            print("Fetching peers")
+                            self.beaconClient?.getPeers { result2 in
+                                switch result2 {
+                                case let .success(peers):
+                                    print("Peers fetched")
+                                    
+                                    if(peers.count > 0){
+                                        promise(.success(()))
+                                    }else{
+                                        print("Peer count is 0")
+                                        promise(.failure(Beacon.Error.missingPairedPeer))
                                     }
+                                    
+                                case let .failure(error):
+                                    print("Failed to fetch peers, got error: \(error)")
+                                    promise(.failure(error))
                                 }
                             }
-                            
-                        case let .failure(error):
-                            print("Could not create Beacon client, got error: \(error)")
-                            promise(.failure(error))
                         }
+                        
+                    case let .failure(error):
+                        print("Could not create Beacon client, got error: \(error)")
+                        promise(.failure(error))
                     }
-                    
-                } catch {
-                    print("Could not create Beacon client, got error: \(error)")
-                    promise(.failure(error))
                 }
+                
+            } catch {
+                print("Could not create Beacon client, got error: \(error)")
+                promise(.failure(error))
+            }
         }
         .eraseToAnyPublisher()
     }
@@ -123,6 +123,43 @@ class BeaconConnectService{
         .eraseToAnyPublisher()
     }
     
+    func addPeer(pairingRequest: String) -> AnyPublisher<Beacon.P2PPeer, Error> {
+        return  Future<Beacon.P2PPeer, Error> { [self] (promise) in
+            do {
+                guard let message = URLComponents(string: pairingRequest)?.queryItems?.first(where: { $0.name == "data" })?.value,
+                      let messageData = Base58.base58CheckDecode(message) else {
+                    throw AppError.invalidPairingRequest
+                }
+                
+                let decoder = JSONDecoder()
+                let data = Data(messageData)
+                guard let peer = try? decoder.decode(Beacon.P2PPeer.self, from: data) else {
+                    throw AppError.invalidPairingRequest
+                }
+                
+                guard let beaconClient = self.beaconClient else {
+                    throw AppError.pendingBeaconClient
+                }
+                
+                beaconClient.add([.p2p(peer)]) { result in
+                    switch result {
+                    case .success(_):
+                        print("Peers added \(peer) ")
+                        promise(.success(peer))
+                        
+                    case let .failure(error):
+                        print("addPeer Error: \(error)")
+                        promise(.failure(error))
+                    }
+                }
+            } catch {
+                print("Error: \(error)")
+                promise(.failure(error))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
     func removePeers() -> AnyPublisher<Void, Error> {
         return Future<Void, Error> { [self] (promise) in
             self.beaconClient?.removeAllPeers { result in
@@ -139,6 +176,57 @@ class BeaconConnectService{
         }
         .eraseToAnyPublisher()
     }
+    
+    
+    
+    func pause() -> AnyPublisher<Void, Error> {
+        return Future<Void, Error> { [self] (promise) in
+            self.beaconClient?.pause() { result in
+                switch result {
+                case .success(_):
+                    print("Paused")
+                    promise(.success(()))
+                case let .failure(error):
+                    print("Failed to pause, got error: \(error)")
+                    promise(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func resume() -> AnyPublisher<Void, Error> {
+        return Future<Void, Error> { [self] (promise) in
+            self.beaconClient?.resume() { result in
+                switch result {
+                case .success(_):
+                    print("Resumed")
+                    promise(.success(()))
+                case let .failure(error):
+                    print("Failed to resume, got error: \(error)")
+                    promise(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func stop() -> AnyPublisher<Void, Error> {
+        return Future<Void, Error> { [self] (promise) in
+            self.beaconClient?.disconnect() { result in
+                switch result {
+                case .success(_):
+                    print("disconnected")
+                    promise(.success(()))
+                case let .failure(error):
+                    print("Failed to disconnect, got error: \(error)")
+                    promise(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
     
     func respondExample(completion: @escaping Completion<Void>) {
         if let request = awaitingRequest {
@@ -198,6 +286,8 @@ class BeaconConnectService{
     func observeRequest() -> AnyPublisher<String, Never> {
         publisher.eraseToAnyPublisher()
     }
+    
+    
 }
 
 
@@ -238,4 +328,11 @@ extension BeaconRequest: Encodable {
     enum Error: Swift.Error {
         case unsupportedBlockchain
     }
+}
+
+
+enum AppError: String, Error {
+    case pendingBeaconClient
+    case aborted
+    case invalidPairingRequest
 }

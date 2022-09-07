@@ -26,6 +26,14 @@ class MethodChannelBeacon extends BeaconPlatform {
   }
 
   @override
+  Future<Map> addPeer({required String pairingRequest}) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("pairingRequest", () => pairingRequest);
+    Map data = await methodChannel.invokeMethod('addPeer', args);
+    return data;
+  }
+
+  @override
   Future<Map> removePeers() async {
     Map data = await methodChannel.invokeMethod('removePeers');
     return data;
@@ -40,5 +48,23 @@ class MethodChannelBeacon extends BeaconPlatform {
   @override
   Stream<String> getBeaconResponse() {
     return eventChannel.receiveBroadcastStream().cast();
+  }
+
+  @override
+  Future<Map> pause() async {
+    Map data = await methodChannel.invokeMethod('pause');
+    return data;
+  }
+
+  @override
+  Future<Map> resume() async {
+    Map data = await methodChannel.invokeMethod('resume');
+    return data;
+  }
+
+  @override
+  Future<Map> stop() async {
+    Map data = await methodChannel.invokeMethod('stop');
+    return data;
   }
 }

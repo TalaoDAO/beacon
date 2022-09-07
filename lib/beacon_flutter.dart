@@ -9,6 +9,10 @@ class Beacon {
     return BeaconPlatform.instance.pair(pairingRequest: pairingRequest);
   }
 
+  Future<Map> addPeer({required String pairingRequest}) {
+    return BeaconPlatform.instance.addPeer(pairingRequest: pairingRequest);
+  }
+
   Future<Map> removePeers() {
     return BeaconPlatform.instance.removePeers();
   }
@@ -19,5 +23,17 @@ class Beacon {
 
   Stream<String> getBeaconResponse() {
     return BeaconPlatform.instance.getBeaconResponse();
+  }
+
+  Future<Map> pause() {
+    return BeaconPlatform.instance.pause();
+  }
+
+  Future<Map> resume() {
+    return BeaconPlatform.instance.resume();
+  }
+
+  Future<Map> stop() {
+    return BeaconPlatform.instance.stop();
   }
 }
