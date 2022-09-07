@@ -47,9 +47,13 @@ class BeaconChannelHandler: NSObject {
     
     func addPeer(call: FlutterMethodCall, result: @escaping FlutterResult) {
         let args: NSDictionary = call.arguments as! NSDictionary
-        let pairingRequest: String = args["pairingRequest"] as! String
+        let id: String = args["id"] as! String
+        let name: String = args["name"] as! String
+        let publicKey: String = args["publicKey"] as! String
+        let relayServer: String = args["relayServer"] as! String
+        let version: String = args["version"] as! String
         
-        BeaconConnectService.shared.addPeer(pairingRequest: pairingRequest)
+        BeaconConnectService.shared.addPeer(id: id, name: name, publicKey: publicKey, relayServer: relayServer, version: version)
             .tryMap { try JSONEncoder().encode($0) }
             .map { String(data: $0, encoding: .utf8) }
             .sink(receiveCompletion: {  (completion) in
@@ -130,28 +134,6 @@ class BeaconChannelHandler: NSObject {
             })
             .store(in: &cancelBag)
     }
-    
-    func pairingRequestToP2P(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let args: NSDictionary = call.arguments as! NSDictionary
-        let pairingRequest: String = args["pairingRequest"] as! String
-        
-        BeaconConnectService.shared.pairingRequestToP2P(pairingRequest: pairingRequest)
-            .tryMap { try JSONEncoder().encode($0) }
-            .map { String(data: $0, encoding: .utf8) }
-            .sink(receiveCompletion: {  (completion) in
-                result([
-                    "success": false,
-                    "message": "Invalid request"
-                ])
-            }, receiveValue: { serializedPeer in
-                result([
-                    "success": true,
-                    "peer": serializedPeer as Any
-                ])
-            })
-            .store(in: &cancelBag)
-    }
-    
     
 }
 

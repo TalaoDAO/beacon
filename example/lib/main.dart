@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final TextEditingController pairingRequestController = TextEditingController(
       text:
-          "5kYVmSAVyZrr11A6psYtSV3hCVMYg9qLqtoHuySn6sF1SjQQiJS28JYzU44kscf8XVEtFkPprpgN9CuGu3RPffhBkxG4G8iBKC1zX2L6mZ9JmNnobUXPet2iMQLHbb6AbgaKURrDwBAhR6xtrGWWz15fbfHT1P1q6zMwBRoX2T6kmZUJvi9MWqU7yL6Y9JRBZW7XUE1BQ6i2VSfyeg3qp6Gi45VWLpuahjEF3BgEsDDMVdRTuiNNwuW3pV3DDrsZCySZPqAGfxwJRDekAV6n6WVudtbAMwz1TotiecuVKcn8Pch5Mu7rAi8A4Z9dSPmS");
+          "GUsRsanpcKz448V7FEFuFSL9ymnrfLojSUxMd6gwQ6MQ8NrChFoPMqQRartR482nQjEb7vrP9xN7oGZvbv397xyMfY7QP6qKQTaDJXUEWCwHQYBNDPjkJosB1HfxZPqfdzftVM49y43RUrvzEozJ7hUwCr1yFPLARkbVx6LLD4hi2AGHCbsKvQeQ8nLMuejt8qTnBRD94tFxFtLiyVq5Faz395RH7SvqJDNHsagw2MYNcruwGB3QccqqGFpSRxoPGgj7gJcVmhSHJspvZeHqhHa4siLxr7UVztDSBEaFtGNsabSxEYmFXKv4aVkMcikSodPC393fX84r");
 
   bool hasPeers = false;
 
@@ -172,9 +172,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   textAlign: TextAlign.left,
                 ),
               ),
-              SizedBox(
-                height: 100,
-              )
             ],
           ),
         ),

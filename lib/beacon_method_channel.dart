@@ -26,9 +26,19 @@ class MethodChannelBeacon extends BeaconPlatform {
   }
 
   @override
-  Future<Map> addPeer({required String pairingRequest}) async {
+  Future<Map> addPeer({
+    required String id,
+    required String name,
+    required String publicKey,
+    required String relayServer,
+    required String version,
+  }) async {
     Map<String, dynamic> args = <String, dynamic>{};
-    args.putIfAbsent("pairingRequest", () => pairingRequest);
+    args.putIfAbsent("id", () => id);
+    args.putIfAbsent("name", () => name);
+    args.putIfAbsent("publicKey", () => publicKey);
+    args.putIfAbsent("relayServer", () => relayServer);
+    args.putIfAbsent("version", () => version);
     Map data = await methodChannel.invokeMethod('addPeer', args);
     return data;
   }
@@ -65,14 +75,6 @@ class MethodChannelBeacon extends BeaconPlatform {
   @override
   Future<Map> stop() async {
     Map data = await methodChannel.invokeMethod('stop');
-    return data;
-  }
-
-  @override
-  Future<Map> pairingRequestToP2P({required String pairingRequest}) async {
-    Map<String, dynamic> args = <String, dynamic>{};
-    args.putIfAbsent("pairingRequest", () => pairingRequest);
-    Map data = await methodChannel.invokeMethod('pairingRequestToP2P', args);
     return data;
   }
 }

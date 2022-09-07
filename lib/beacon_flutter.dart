@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'beacon_platform_interface.dart';
+import 'package:base_codecs/base_codecs.dart';
 
 class Beacon {
   Future<Map> startBeacon() {
@@ -9,8 +12,15 @@ class Beacon {
     return BeaconPlatform.instance.pair(pairingRequest: pairingRequest);
   }
 
-  Future<Map> addPeer({required String pairingRequest}) {
-    return BeaconPlatform.instance.addPeer(pairingRequest: pairingRequest);
+  Future<Map> addPeer({required String pairingRequest}) async {
+    Map p2pData = pairingRequestToP2P(pairingRequest: pairingRequest);
+    return BeaconPlatform.instance.addPeer(
+      id: p2pData['id'],
+      name: p2pData['name'],
+      publicKey: p2pData['publicKey'],
+      relayServer: p2pData['relayServer'],
+      version: p2pData['version'],
+    );
   }
 
   Future<Map> removePeers() {
@@ -37,8 +47,10 @@ class Beacon {
     return BeaconPlatform.instance.stop();
   }
 
-  Future<Map> pairingRequestToP2P({required String pairingRequest}) {
-    return BeaconPlatform.instance
-        .pairingRequestToP2P(pairingRequest: pairingRequest);
+  Map<String, dynamic> pairingRequestToP2P({required String pairingRequest}) {
+    var uint8List = base58CheckDecode(pairingRequest);
+    String decoded = utf8.decode(uint8List);
+    Map<String, String> data = Map<String, String>.from(jsonDecode(decoded));
+    return data;
   }
 }

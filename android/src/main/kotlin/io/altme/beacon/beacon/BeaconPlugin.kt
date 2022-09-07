@@ -27,6 +27,8 @@ import it.airgap.beaconsdk.client.wallet.BeaconWalletClient
 import it.airgap.beaconsdk.client.wallet.compat.stop
 import it.airgap.beaconsdk.core.client.BeaconClient
 import it.airgap.beaconsdk.core.data.BeaconError
+import it.airgap.beaconsdk.core.data.P2pPeer
+import it.airgap.beaconsdk.core.internal.utils.*
 import it.airgap.beaconsdk.core.message.BeaconMessage
 import it.airgap.beaconsdk.core.message.BeaconRequest
 import it.airgap.beaconsdk.core.message.ErrorBeaconResponse
@@ -38,13 +40,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** BeaconPlugin */ 
-class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandler, FlutterPlugin{
+/** BeaconPlugin */
+class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler, FlutterPlugin {
     private val tag = "BeaconPlugin"
-    
+
     private lateinit var methodChannel: MethodChannel
     private lateinit var eventChannel: EventChannel
- 
+
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "beaconMethod")
         methodChannel.setMethodCallHandler(this)
@@ -62,6 +64,14 @@ class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandle
             "pair" -> {
                 val pairingRequest: String = call.argument("pairingRequest") ?: ""
                 pair(pairingRequest, result)
+            }
+            "addPeer" -> {
+                val id: String = call.argument("id") ?: ""
+                val name: String = call.argument("name") ?: ""
+                val publicKey: String = call.argument("publicKey") ?: ""
+                val relayServer: String = call.argument("relayServer") ?: ""
+                val version: String = call.argument("version") ?: ""
+                addPeer(id, name, publicKey, relayServer, version, result)
             }
             "removePeers" -> {
                 removePeers(result)
@@ -168,7 +178,7 @@ class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandle
         }
     }
 
-    private fun pair(pairingRequest: String, result: Result) { 
+    private fun pair(pairingRequest: String, result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
             beaconClient?.pair(pairingRequest)
             val peers = beaconClient?.getPeers()
@@ -176,6 +186,29 @@ class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandle
             result.success(mapOf("success" to hasPeer))
         }
     }
+
+    private fun addPeer(
+        id: String,
+        name: String,
+        publicKey: String,
+        relayServer: String,
+        version: String,
+        result: Result
+    ) {
+        val peer = P2pPeer(
+            id = id,
+            name = name,
+            publicKey = publicKey,
+            relayServer = relayServer,
+            version = version,
+        )
+        CoroutineScope(Dispatchers.IO).launch {
+            beaconClient?.addPeers(peer)
+            val jsonPeer = Gson().toJson(peer)
+            result.success(mapOf("success" to true, "result" to jsonPeer))
+        }
+    }
+
 
     private fun removePeers(result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -212,5 +245,5 @@ class BeaconPlugin :  MethodChannel.MethodCallHandler, EventChannel.StreamHandle
             network,
             client,
         )
-    } 
+    }
 }

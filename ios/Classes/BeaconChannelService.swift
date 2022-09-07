@@ -123,17 +123,20 @@ class BeaconConnectService{
         .eraseToAnyPublisher()
     }
     
-    func addPeer(pairingRequest: String) -> AnyPublisher<Beacon.P2PPeer, Error> {
-        return  Future<Beacon.P2PPeer, Error> { [self] (promise) in
-            do {
-                guard let messageData = Base58.base58CheckDecode(pairingRequest) else {
-                    throw AppError.invalidPairingRequest
-                }
-                
-                let data = Data(messageData)
-                guard let peer = try? JSONDecoder().decode(Beacon.P2PPeer.self, from: data) else {
-                    throw AppError.invalidPairingRequest
-                }
+    func addPeer(
+        id: String,
+        name: String,
+        publicKey: String,
+        relayServer: String,
+        version: String ) -> AnyPublisher<Beacon.P2PPeer, Error> {
+            return  Future<Beacon.P2PPeer, Error> { [self] (promise) in
+                let peer = Beacon.P2PPeer(
+                    id : id,
+                    name :name,
+                    publicKey : publicKey,
+                    relayServer : relayServer,
+                    version : version
+                )
                 
                 self.beaconClient?.add([.p2p(peer)]) { result in
                     switch result {
@@ -146,13 +149,9 @@ class BeaconConnectService{
                         promise(.failure(error))
                     }
                 }
-            } catch {
-                print("Error: \(error)")
-                promise(.failure(error))
             }
+            .eraseToAnyPublisher()
         }
-        .eraseToAnyPublisher()
-    }
     
     func removePeers() -> AnyPublisher<Void, Error> {
         return Future<Void, Error> { [self] (promise) in
@@ -216,28 +215,6 @@ class BeaconConnectService{
                     print("Failed to disconnect, got error: \(error)")
                     promise(.failure(error))
                 }
-            }
-        }
-        .eraseToAnyPublisher()
-    }
-    
-    func pairingRequestToP2P(pairingRequest: String) -> AnyPublisher<Beacon.P2PPeer, Error> {
-        return  Future<Beacon.P2PPeer, Error> { [] (promise) in
-            do {
-                guard let messageData = Base58.base58CheckDecode(pairingRequest) else {
-                    throw AppError.invalidPairingRequest
-                }
-                
-                let data = Data(messageData)
-                guard let peer = try? JSONDecoder().decode(Beacon.P2PPeer.self, from: data) else {
-                    throw AppError.invalidPairingRequest
-                }
-                
-                promise(.success(peer))
-                
-            } catch {
-                print("Error: \(error)")
-                promise(.failure(error))
             }
         }
         .eraseToAnyPublisher()
@@ -350,5 +327,4 @@ extension BeaconRequest: Encodable {
 enum AppError: String, Error {
     case pendingBeaconClient
     case aborted
-    case invalidPairingRequest
 }

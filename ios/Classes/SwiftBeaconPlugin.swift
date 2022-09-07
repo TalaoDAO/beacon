@@ -33,8 +33,6 @@ public class SwiftBeaconPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             BeaconChannelHandler.shared.resume(result: result)
         case "stop":
             BeaconChannelHandler.shared.stop(result: result)
-        case "pairingRequestToP2P":
-            BeaconChannelHandler.shared.pairingRequestToP2P(call: call, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }
