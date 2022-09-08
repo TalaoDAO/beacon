@@ -53,4 +53,18 @@ class Beacon {
     Map<String, String> data = Map<String, String>.from(jsonDecode(decoded));
     return data;
   }
+
+  Future<Map> removePeerUsingPublicKey({required String publicKey}) async {
+    return BeaconPlatform.instance.removePeer(publicKey: publicKey);
+  }
+
+  Future<Map> removePeerUsingPairingRequest(
+      {required String pairingRequest}) async {
+    Map p2pData = pairingRequestToP2P(pairingRequest: pairingRequest);
+    return BeaconPlatform.instance.removePeer(publicKey: p2pData['publicKey']);
+  }
+
+  Future<Map> getPeers() async {
+    return BeaconPlatform.instance.getPeers();
+  }
 }

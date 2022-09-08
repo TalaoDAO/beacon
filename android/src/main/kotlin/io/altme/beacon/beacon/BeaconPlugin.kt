@@ -25,6 +25,7 @@ import it.airgap.beaconsdk.blockchain.tezos.message.response.PermissionTezosResp
 import it.airgap.beaconsdk.blockchain.tezos.tezos
 import it.airgap.beaconsdk.client.wallet.BeaconWalletClient
 import it.airgap.beaconsdk.client.wallet.compat.stop
+import it.airgap.beaconsdk.client.wallet.compat.*
 import it.airgap.beaconsdk.core.client.BeaconClient
 import it.airgap.beaconsdk.core.data.BeaconError
 import it.airgap.beaconsdk.core.data.P2pPeer
@@ -32,6 +33,8 @@ import it.airgap.beaconsdk.core.internal.utils.*
 import it.airgap.beaconsdk.core.message.BeaconMessage
 import it.airgap.beaconsdk.core.message.BeaconRequest
 import it.airgap.beaconsdk.core.message.ErrorBeaconResponse
+import it.airgap.beaconsdk.core.data.Peer
+import it.airgap.beaconsdk.core.message.*
 import it.airgap.beaconsdk.transport.p2p.matrix.p2pMatrix
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -75,6 +78,13 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
             }
             "removePeers" -> {
                 removePeers(result)
+            }
+            "removePeer" -> {
+                val publicKey: String = call.argument("publicKey") ?: ""
+                removePeer(publicKey, result)
+            }
+            "getPeers" -> {
+                getPeers(result)
             }
             else -> {
                 result.notImplemented()
@@ -218,6 +228,30 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
             result.success(mapOf("success" to !hasPeer))
         }
     }
+
+
+    private fun removePeer(publicKey: String, result: Result) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val peers = beaconClient?.getPeers()
+            val hasPeer = peers?.isNotEmpty() ?: false
+            if (hasPeer) {
+                val peer: List<Peer> = peers!!.filter { it.publicKey == publicKey }
+                beaconClient?.removePeers(peer)
+                result.success(mapOf("success" to true))
+            } else {
+                result.success(mapOf("success" to false))
+            }
+        }
+    }
+
+
+    private fun getPeers(result: Result) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val peers = beaconClient?.getPeers()
+            result.success(mapOf("success" to true, "result" to peers))
+        }
+    }
+
 
     private fun saveAwaitingRequest(message: BeaconMessage) {
         awaitingRequest = if (message is BeaconRequest) message else null

@@ -57,4 +57,12 @@ abstract class BeaconPlatform extends PlatformInterface {
   Future<Map> stop() {
     throw UnimplementedError('stop() has not been implemented.');
   }
+
+  Future<Map> removePeer({required String publicKey}) {
+    throw UnimplementedError('removePeer() has not been implemented.');
+  }
+
+  Future<Map> getPeers() {
+    throw UnimplementedError('getPeers() has not been implemented.');
+  }
 }

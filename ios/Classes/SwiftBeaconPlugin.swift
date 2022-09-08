@@ -23,6 +23,8 @@ public class SwiftBeaconPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             BeaconChannelHandler.shared.pair(call: call, result: result)
         case "addPeer":
             BeaconChannelHandler.shared.addPeer(call: call, result: result)
+        case "removePeer":
+            BeaconChannelHandler.shared.removePeer(call: call, result: result)
         case "removePeers":
             BeaconChannelHandler.shared.removePeers(result: result)
         case "respondExample":
@@ -33,6 +35,8 @@ public class SwiftBeaconPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             BeaconChannelHandler.shared.resume(result: result)
         case "stop":
             BeaconChannelHandler.shared.stop(result: result)
+        case "getPeers":
+            BeaconChannelHandler.shared.getPeers(result: result)
         default:
             result(FlutterMethodNotImplemented)
         }

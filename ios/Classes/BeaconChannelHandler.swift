@@ -85,6 +85,41 @@ class BeaconChannelHandler: NSObject {
             .store(in: &cancelBag)
     }
     
+    
+    func removePeer(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let args: NSDictionary = call.arguments as! NSDictionary
+        let publicKey: String = args["publicKey"] as! String
+        BeaconConnectService.shared.removePeer(publicKey: publicKey)
+            .sink(receiveCompletion: { _ in
+                result([
+                    "success": false
+                ])
+            }, receiveValue: { _ in
+                result([
+                    "success": true
+                ])
+            })
+            .store(in: &cancelBag)
+    }
+    
+    func getPeers(result: @escaping FlutterResult) {
+        BeaconConnectService.shared.getPeers()
+            .tryMap { try JSONEncoder().encode($0) }
+            .map { String(data: $0, encoding: .utf8) }
+            .sink(receiveCompletion: {  (completion) in
+                result([
+                    "success": false,
+                    "message": "Failed to fetch"
+                ])
+            }, receiveValue: { serializedPeers in
+                result([
+                    "success": true,
+                    "peer": serializedPeers as Any
+                ])
+            })
+            .store(in: &cancelBag)
+    }
+    
     func respondExample(result: @escaping FlutterResult) {
         BeaconConnectService.shared.respondExample(completion: { _ in
             result([

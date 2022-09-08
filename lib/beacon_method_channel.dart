@@ -77,4 +77,18 @@ class MethodChannelBeacon extends BeaconPlatform {
     Map data = await methodChannel.invokeMethod('stop');
     return data;
   }
+
+  @override
+  Future<Map> removePeer({required String publicKey}) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("publicKey", () => publicKey);
+    Map data = await methodChannel.invokeMethod('removePeer', args);
+    return data;
+  }
+
+  @override
+  Future<Map> getPeers() async {
+    Map data = await methodChannel.invokeMethod('getPeers');
+    return data;
+  }
 }

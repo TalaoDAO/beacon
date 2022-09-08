@@ -170,7 +170,39 @@ class BeaconConnectService{
         .eraseToAnyPublisher()
     }
     
+    func removePeer(publicKey: String) -> AnyPublisher<Void, Error>  {
+        return Future<Void, Error> { [self] (promise) in
+            self.beaconClient?.removePeer(withPublicKey: publicKey)  { result in
+                switch result {
+                case .success(_):
+                    print("Successfully removed peer")
+                    promise(.success(()))
+                    
+                case let .failure(error):
+                    print("Failed to remove peer, got error: \(error)")
+                    promise(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
     
+    func getPeers() -> AnyPublisher<[Beacon.Peer], Error> {
+        return  Future<[Beacon.Peer], Error> { [self] (promise) in
+            self.beaconClient?.getPeers { result in
+                switch result {
+                case let .success(peers):
+                    print("Successfully fetched")
+                    promise(.success(peers))
+                    
+                case let .failure(error):
+                    print("getPeers Error: \(error)")
+                    promise(.failure(error))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
     
     func pause() -> AnyPublisher<Void, Error> {
         return Future<Void, Error> { [self] (promise) in
