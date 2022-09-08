@@ -27,6 +27,8 @@ public class SwiftBeaconPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
             BeaconChannelHandler.shared.removePeer(call: call, result: result)
         case "removePeers":
             BeaconChannelHandler.shared.removePeers(result: result)
+        case "tezosResponse":
+            BeaconChannelHandler.shared.tezosResponse(call: call, result: result)
         case "respondExample":
             BeaconChannelHandler.shared.respondExample(result: result)
         case "pause":

@@ -120,6 +120,15 @@ class BeaconChannelHandler: NSObject {
             .store(in: &cancelBag)
     }
     
+    
+    func tezosResponse(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        BeaconConnectService.shared.tezosResponse(call:call, completion: { _ in
+            result([
+                "success": true
+            ])
+        })
+    }
+    
     func respondExample(result: @escaping FlutterResult) {
         BeaconConnectService.shared.respondExample(completion: { _ in
             result([
@@ -180,8 +189,44 @@ extension BeaconChannelHandler: FlutterStreamHandler {
     
     func observeEvents(events: @escaping FlutterEventSink) {
         BeaconConnectService.shared.observeRequest()
-            .sink { (event) in
-                events(event)
+            .throttle(for: 1.0, scheduler: RunLoop.main, latest: true)
+            .sink { request in
+                
+                var type = ""
+                
+                let encoder = JSONEncoder()
+               // encoder.outputFormatting = .prettyPrinted
+                let data = try? encoder.encode(request)
+                let requestData = data.flatMap { String(data: $0, encoding: .utf8) }
+                
+
+                switch request {
+                case .permission(_):
+                    type = "permission"
+
+                case let .blockchain(blockchainRequest):
+                    switch blockchainRequest {
+                    case .signPayload(_):
+                        type = "signPayload"
+                    case .operation(_):
+                        type = "operation"
+                    case .broadcast(_):
+                        type = "broadcast"
+                        break;
+                    }
+                }
+                
+                let map = [
+                    "type": type,
+                    "request": requestData,
+                ]
+                
+             
+                let data2 = try? encoder.encode(map)
+                let output = data2.flatMap { String(data: $0, encoding: .utf8) }
+                
+                
+                events(output)
             }
             .store(in: &cancelBag)
     }

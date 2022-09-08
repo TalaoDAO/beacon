@@ -15,7 +15,7 @@ class BeaconConnectService{
     private var beaconClient: Beacon.WalletClient? = nil
     private var awaitingRequest: BeaconRequest<Tezos>? = nil
     
-    let publisher = PassthroughSubject<String, Never>()
+    let publisher = PassthroughSubject<BeaconRequest<Tezos>, Never>()
     
     func startBeacon() -> AnyPublisher<Void, Error>  {
         return Future<Void, Error> { [self] (promise) in
@@ -92,17 +92,9 @@ class BeaconConnectService{
         case let .success(request):
             print("Sending response from dApp")
             self.awaitingRequest = request
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            let data = try? encoder.encode(request)
-            
-            DispatchQueue.main.async {
-                let value = data.flatMap { String(data: $0, encoding: .utf8) }
-                self.publisher.send(value!)
-            }
+            self.publisher.send(request)
         case let .failure(error):
             print("Error while processing incoming messages: \(error)")
-            self.publisher.send(String("Error"))
         }
     }
     
@@ -252,15 +244,14 @@ class BeaconConnectService{
         .eraseToAnyPublisher()
     }
     
-    
-    func respondExample(completion: @escaping Completion<Void>) {
+    func tezosResponse(call: FlutterMethodCall, completion: @escaping Completion<Void>) {
         if let request = awaitingRequest {
             awaitingRequest = nil
             do {
-                beaconClient?.respond(with: try response(from: request)) { result in
+                beaconClient?.respond(with: try response(call:call, from: request)) { result in
                     switch result {
                     case .success(_):
-                        print("Sent the response from wallet")
+                        print("Sent the example response from wallet")
                         completion(.success(()))
                     case let .failure(error):
                         print("Failed to send the response, got error: \(error)")
@@ -274,7 +265,64 @@ class BeaconConnectService{
         }
     }
     
-    private func response(from request: BeaconRequest<Tezos>) throws -> BeaconResponse<Tezos> {
+    private func response(call: FlutterMethodCall, from request: BeaconRequest<Tezos>) throws -> BeaconResponse<Tezos> {
+        let args: NSDictionary = call.arguments as! NSDictionary
+        switch request {
+        case let .permission(permissionRequest):
+            let publicKey: String? = args["publicKey"] as? String
+            if let publicKey = publicKey {
+                guard let address = args["address"] as? String else { return permissionRequest.decline()}
+                return try! permissionRequest.connect(publicKey: publicKey, address: address)
+            } else {
+                return permissionRequest.decline()
+            }
+            
+        case let .blockchain(blockchainRequest):
+            switch blockchainRequest {
+            case let .signPayload(signPayload):
+                let signature: String? = args["signature"] as? String
+                if let signature = signature {
+                    return signPayload.accept(signature: signature)
+                } else {
+                    return signPayload.decline()
+                }
+                
+            case let .operation(operation):
+                let transactionHash: String? = args["transactionHash"] as? String
+                if let transactionHash = transactionHash {
+                    return operation.done(transactionHash: transactionHash)
+                } else {
+                    return operation.decline()
+                }
+            default:
+                return .error(ErrorBeaconResponse(from: blockchainRequest, errorType: .aborted))
+            }
+        }
+    }
+    
+    
+    func respondExample(completion: @escaping Completion<Void>) {
+        if let request = awaitingRequest {
+            awaitingRequest = nil
+            do {
+                beaconClient?.respond(with: try exampleResponse(from: request)) { result in
+                    switch result {
+                    case .success(_):
+                        print("Sent the example response from wallet")
+                        completion(.success(()))
+                    case let .failure(error):
+                        print("Failed to send the response, got error: \(error)")
+                        completion(.failure(error))
+                    }
+                }
+            } catch {
+                print("Failed to send the response, got error: \(error)")
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    private func exampleResponse(from request: BeaconRequest<Tezos>) throws -> BeaconResponse<Tezos> {
         switch request {
         case let .permission(content):
             return .permission(
@@ -299,16 +347,7 @@ class BeaconConnectService{
     }
     
     
-    private static func exampleSubstrateAccount(network: Substrate.Network) throws -> Substrate.Account {
-        try Substrate.Account(
-            publicKey: "628f3940a6210a2135ba355f7ff9f8e9fbbfd04f8571e99e1df75554d4bcd24f",
-            address: "5EHw6XmdpoaaJiPMXFKr1CcHcXPVYZemc9NoKHhEoguavzJN",
-            network: network
-        )
-    }
-    
-    
-    func observeRequest() -> AnyPublisher<String, Never> {
+    func observeRequest() -> AnyPublisher<BeaconRequest<Tezos>, Never> {
         publisher.eraseToAnyPublisher()
     }
     
@@ -355,8 +394,44 @@ extension BeaconRequest: Encodable {
     }
 }
 
+extension PermissionTezosRequest {
+    func connect(publicKey: String, address: String) throws -> BeaconResponse<Tezos> {
+        return .permission(
+            PermissionTezosResponse(
+                from: self,
+                account: try Tezos.Account(
+                    publicKey: publicKey,
+                    address: address,
+                    network: network
+                ))
+        )
+    }
+    
+    func decline() -> BeaconResponse<Tezos> {
+        .error(ErrorBeaconResponse(from: self, errorType: .aborted))
+    }
+}
 
-enum AppError: String, Error {
-    case pendingBeaconClient
-    case aborted
+extension SignPayloadTezosRequest {
+    func accept(signature: String) -> BeaconResponse<Tezos> {
+        .blockchain(
+            .signPayload(SignPayloadTezosResponse(from: self, signature: signature))
+        )
+    }
+    
+    func decline() -> BeaconResponse<Tezos> {
+        .error(ErrorBeaconResponse(id: id, version: version, destination: origin, errorType: .aborted))
+    }
+}
+
+extension OperationTezosRequest {
+    func done(transactionHash: String) -> BeaconResponse<Tezos> {
+        .blockchain(
+            .operation(OperationTezosResponse(from: self, transactionHash: transactionHash))
+        )
+    }
+    
+    func decline() -> BeaconResponse<Tezos> {
+        .error(ErrorBeaconResponse(id: id, version: version, destination: origin, errorType: .aborted))
+    }
 }
