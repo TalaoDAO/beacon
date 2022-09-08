@@ -248,7 +248,8 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     private fun getPeers(result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
             val peers = beaconClient?.getPeers()
-            result.success(mapOf("success" to true, "result" to peers))
+            val jsonPeers = Gson().toJson(peers)
+            result.success(mapOf("success" to true, "result" to jsonPeers))
         }
     }
 
