@@ -145,6 +145,7 @@ class BeaconConnectService{
             .eraseToAnyPublisher()
         }
     
+  
     func removePeers() -> AnyPublisher<Void, Error> {
         return Future<Void, Error> { [self] (promise) in
             self.beaconClient?.removeAllPeers { result in

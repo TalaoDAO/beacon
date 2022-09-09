@@ -192,12 +192,15 @@ extension BeaconChannelHandler: FlutterStreamHandler {
             .throttle(for: 1.0, scheduler: RunLoop.main, latest: true)
             .sink { request in
                 
+                
                 var type = ""
                 
                 let encoder = JSONEncoder()
                // encoder.outputFormatting = .prettyPrinted
                 let data = try? encoder.encode(request)
                 let requestData = data.flatMap { String(data: $0, encoding: .utf8) }
+                
+                let requestDataDictionary = requestData!.dictionary()!
                 
 
                 switch request {
@@ -216,24 +219,53 @@ extension BeaconChannelHandler: FlutterStreamHandler {
                     }
                 }
                 
-                let map = [
+                let map: [String : Any] = [
                     "type": type,
-                    "request": requestData,
+                    "request": requestDataDictionary
                 ]
                 
-             
-                let data2 = try? encoder.encode(map)
-                let output = data2.flatMap { String(data: $0, encoding: .utf8) }
-                
-                
-                events(output)
+                events(map.json)
             }
             .store(in: &cancelBag)
     }
+    
+
     
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
         cancelBag.removeAll()
         return nil
     }
     
+}
+
+extension Dictionary {
+
+    var json: String {
+        let invalidJson = "Not a valid JSON"
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: self, options: .prettyPrinted)
+            return String(bytes: jsonData, encoding: String.Encoding.utf8) ?? invalidJson
+        } catch {
+            return invalidJson
+        }
+    }
+
+    func printJson() {
+        print(json)
+    }
+
+}
+
+extension String{
+    func dictionary() -> [String:AnyObject]? {
+       if let data = self.data(using: .utf8) {
+           do {
+               let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
+               return json
+           } catch {
+               print("Something went wrong")
+           }
+       }
+       return nil
+   }
 }
