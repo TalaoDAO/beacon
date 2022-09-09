@@ -192,37 +192,34 @@ extension BeaconChannelHandler: FlutterStreamHandler {
             .throttle(for: 1.0, scheduler: RunLoop.main, latest: true)
             .sink { request in
                 
-                
-                var type = ""
-                
                 let encoder = JSONEncoder()
-               // encoder.outputFormatting = .prettyPrinted
+                
                 let data = try? encoder.encode(request)
                 let requestData = data.flatMap { String(data: $0, encoding: .utf8) }
-                
                 let requestDataDictionary = requestData!.dictionary()!
                 
+                
+                var map: [String : Any] = [
+                    "request": requestDataDictionary
+                ]
 
                 switch request {
                 case .permission(_):
-                    type = "permission"
+                    map["type"] = "permission"
 
                 case let .blockchain(blockchainRequest):
                     switch blockchainRequest {
                     case .signPayload(_):
-                        type = "signPayload"
+                        map["type"] = "signPayload"
                     case .operation(_):
-                        type = "operation"
+                        map["type"] = "operation"
                     case .broadcast(_):
-                        type = "broadcast"
+                        map["type"] = "broadcast"
                         break;
                     }
                 }
                 
-                let map: [String : Any] = [
-                    "type": type,
-                    "request": requestDataDictionary
-                ]
+
                 
                 events(map.json)
             }
