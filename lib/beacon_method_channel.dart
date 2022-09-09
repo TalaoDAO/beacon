@@ -91,4 +91,38 @@ class MethodChannelBeacon extends BeaconPlatform {
     Map data = await methodChannel.invokeMethod('getPeers');
     return data;
   }
+
+  @override
+  Future<Map> permissionResponse({
+    required String id,
+    required String publicKey,
+    required String address,
+  }) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("id", () => id);
+    args.putIfAbsent("publicKey", () => publicKey);
+    args.putIfAbsent("address", () => address);
+    Map data = await methodChannel.invokeMethod('tezosResponse', args);
+    return data;
+  }
+
+  @override
+  Future<Map> signPayloadResponse(
+      {required String id, required String signature}) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("id", () => id);
+    args.putIfAbsent("signature", () => signature);
+    Map data = await methodChannel.invokeMethod('tezosResponse', args);
+    return data;
+  }
+
+  @override
+  Future<Map> operationResponse(
+      {required String id, required String transactionHash}) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("id", () => id);
+    args.putIfAbsent("transactionHash", () => transactionHash);
+    Map data = await methodChannel.invokeMethod('tezosResponse', args);
+    return data;
+  }
 }

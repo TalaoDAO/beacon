@@ -16,7 +16,7 @@ abstract class BeaconPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<Map> startBeacon() {
+  Future<Map> startBeacon() async {
     throw UnimplementedError('startBeacon() has not been implemented.');
   }
 
@@ -30,15 +30,15 @@ abstract class BeaconPlatform extends PlatformInterface {
     required String publicKey,
     required String relayServer,
     required String version,
-  }) {
+  }) async {
     throw UnimplementedError('addPeer() has not been implemented.');
   }
 
-  Future<Map> removePeers() {
+  Future<Map> removePeers() async {
     throw UnimplementedError('removePeers() has not been implemented.');
   }
 
-  Future<void> respondExample() {
+  Future<void> respondExample() async {
     throw UnimplementedError('respondExample() has not been implemented.');
   }
 
@@ -46,23 +46,41 @@ abstract class BeaconPlatform extends PlatformInterface {
     throw UnimplementedError('getBeaconResponse() has not been implemented.');
   }
 
-  Future<Map> pause() {
+  Future<Map> pause() async {
     throw UnimplementedError('pause() has not been implemented.');
   }
 
-  Future<Map> resume() {
+  Future<Map> resume() async {
     throw UnimplementedError('resume() has not been implemented.');
   }
 
-  Future<Map> stop() {
+  Future<Map> stop() async {
     throw UnimplementedError('stop() has not been implemented.');
   }
 
-  Future<Map> removePeer({required String publicKey}) {
+  Future<Map> removePeer({required String publicKey}) async {
     throw UnimplementedError('removePeer() has not been implemented.');
   }
 
-  Future<Map> getPeers() {
+  Future<Map> getPeers() async {
+    throw UnimplementedError('getPeers() has not been implemented.');
+  }
+
+  Future<Map> permissionResponse({
+    required String id,
+    required String publicKey,
+    required String address,
+  }) async {
+    throw UnimplementedError('permissionResponse() has not been implemented.');
+  }
+
+  Future<Map> signPayloadResponse(
+      {required String id, required String signature}) async {
+    throw UnimplementedError('signPayloadResponse() has not been implemented.');
+  }
+
+  Future<Map> operationResponse(
+      {required String id, required String transactionHash}) {
     throw UnimplementedError('getPeers() has not been implemented.');
   }
 }

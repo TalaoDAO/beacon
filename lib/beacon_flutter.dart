@@ -67,4 +67,25 @@ class Beacon {
   Future<Map> getPeers() async {
     return BeaconPlatform.instance.getPeers();
   }
+
+  Future<Map> permissionResponse({
+    required String id,
+    required String publicKey,
+    required String address,
+  }) async {
+    return BeaconPlatform.instance
+        .permissionResponse(id: id, publicKey: publicKey, address: address);
+  }
+
+  Future<Map> signPayloadResponse(
+      {required String id, required String signature}) async {
+    return BeaconPlatform.instance
+        .signPayloadResponse(id: id, signature: signature);
+  }
+
+  Future<Map> operationResponse(
+      {required String id, required String transactionHash}) async {
+    return BeaconPlatform.instance
+        .operationResponse(id: id, transactionHash: transactionHash);
+  }
 }
