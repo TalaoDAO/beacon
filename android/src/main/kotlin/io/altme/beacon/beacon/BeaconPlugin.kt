@@ -16,25 +16,28 @@ import it.airgap.beaconsdk.blockchain.substrate.substrate
 import it.airgap.beaconsdk.blockchain.tezos.data.TezosAccount
 import it.airgap.beaconsdk.blockchain.tezos.data.TezosError
 import it.airgap.beaconsdk.blockchain.tezos.data.TezosNetwork
+import it.airgap.beaconsdk.blockchain.tezos.data.TezosPermission
+import it.airgap.beaconsdk.blockchain.tezos.data.operation.*
 import it.airgap.beaconsdk.blockchain.tezos.extension.from
 import it.airgap.beaconsdk.blockchain.tezos.message.request.BroadcastTezosRequest
 import it.airgap.beaconsdk.blockchain.tezos.message.request.OperationTezosRequest
 import it.airgap.beaconsdk.blockchain.tezos.message.request.PermissionTezosRequest
 import it.airgap.beaconsdk.blockchain.tezos.message.request.SignPayloadTezosRequest
+import it.airgap.beaconsdk.blockchain.tezos.message.response.OperationTezosResponse
 import it.airgap.beaconsdk.blockchain.tezos.message.response.PermissionTezosResponse
+import it.airgap.beaconsdk.blockchain.tezos.message.response.SignPayloadTezosResponse
 import it.airgap.beaconsdk.blockchain.tezos.tezos
 import it.airgap.beaconsdk.client.wallet.BeaconWalletClient
 import it.airgap.beaconsdk.client.wallet.compat.stop
-import it.airgap.beaconsdk.client.wallet.compat.*
 import it.airgap.beaconsdk.core.client.BeaconClient
 import it.airgap.beaconsdk.core.data.BeaconError
 import it.airgap.beaconsdk.core.data.P2pPeer
-import it.airgap.beaconsdk.core.internal.utils.*
 import it.airgap.beaconsdk.core.message.BeaconMessage
 import it.airgap.beaconsdk.core.message.BeaconRequest
 import it.airgap.beaconsdk.core.message.ErrorBeaconResponse
 import it.airgap.beaconsdk.core.data.Peer
-import it.airgap.beaconsdk.core.message.*
+import it.airgap.beaconsdk.core.data.SigningType
+import it.airgap.beaconsdk.core.internal.data.HexString
 import it.airgap.beaconsdk.transport.p2p.matrix.p2pMatrix
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,6 +45,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.ArrayList
+import java.util.HashMap
 
 /** BeaconPlugin */
 class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler, FlutterPlugin {
@@ -62,6 +67,8 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
             "startBeacon" -> {
                 startBeacon(result)
             }
+            "tezosResponse" ->
+                tezosResponse(call, result)
             "respondExample" ->
                 respondExample(result)
             "pair" -> {
@@ -100,9 +107,28 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         CoroutineScope(Dispatchers.IO).launch {
             publisher
-                .collect {
+                .collect { request ->
                     withContext(Dispatchers.Main) {
-                        events?.success(it)
+                        val map: HashMap<String, Any> = HashMap()
+
+                        map["request"] = Gson().toJson(request)
+
+                        when (request) {
+                            is PermissionTezosRequest -> {
+                                map["type"] = "permission"
+                            }
+                            is SignPayloadTezosRequest -> {
+                                map["type"] = "signPayload"
+                            }
+                            is OperationTezosRequest -> {
+                                map["type"] = "operation"
+                            }
+                            is BroadcastTezosRequest -> {
+                                map["type"] = "broadcast"
+                            }
+                            else -> {}
+                        }
+                        events?.success(map.toString())
                     }
                 }
         }
@@ -115,7 +141,7 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     private var awaitingRequest: BeaconRequest? = null
 
 
-    private var publisher = MutableSharedFlow<String>()
+    private var publisher = MutableSharedFlow<BeaconRequest>()
 
     private fun startBeacon(result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -137,10 +163,67 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                     ?.onEach { result -> result.getOrNull()?.let { saveAwaitingRequest(it) } }
                     ?.collect { result ->
                         result.getOrNull()?.let {
-                            publisher.emit(Gson().toJson(it))
+                            publisher.emit(it)
                         }
                     }
             }
+        }
+    }
+
+    private fun tezosResponse(call: MethodCall, result: Result) {
+        val id: String? = call.argument("id")
+        val request = awaitingRequest ?: return
+
+        if (request.id != id) return
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = when (request) {
+                is PermissionTezosRequest -> {
+                    val publicKey: String? = call.argument("publicKey")
+                    val address: String? = call.argument("address")
+
+                    publicKey?.let {
+                        PermissionTezosResponse.from(
+                            request,
+                            TezosAccount(
+                                it,
+                                address!!,
+                                request.network,
+                                beaconClient!!
+                            ),
+                            listOf(
+                                TezosPermission.Scope.Sign,
+                                TezosPermission.Scope.OperationRequest
+                            )
+                        )
+                    } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
+                }
+                is OperationTezosRequest -> {
+                    val transactionHash: String? = call.argument("transactionHash")
+
+                    transactionHash?.let {
+                        OperationTezosResponse.from(request, transactionHash)
+                    } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
+                }
+                is SignPayloadTezosRequest -> {
+                    val signature: String? = call.argument("signature")
+
+                    signature?.let {
+                        SignPayloadTezosResponse.from(request, SigningType.Raw, it)
+                    } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
+                }
+                is BroadcastTezosRequest -> ErrorBeaconResponse(
+                    request.id,
+                    request.version,
+                    request.origin,
+                    BeaconError.Unknown,
+                    null
+                )
+                else -> ErrorBeaconResponse.from(request, BeaconError.Unknown)
+            }
+            beaconClient?.respond(response)
+            removeAwaitingRequest()
+            result.success(mapOf("success" to true))
         }
     }
 

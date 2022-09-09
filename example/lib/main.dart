@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final TextEditingController pairingRequestController = TextEditingController(
       text:
-          "GUsRsanpcLZseUBNoZxskmAk6wV48vJzEwr38j6jdhWpXB4381ZoBEi2Enh9QQ8RSiMZSCqUZJUs4xaW3CXk5JaKmU6GSBNumKNK49WE2JavnwjZ9QhUQ1ubRK5iuvMt688vUaVMJryGrYbzLvNfqcbZCV7FMWYLP79vVAXFNt5EiNuVYyKJht7vAi3h3y6p877QEvkskygTB14pdn7gSft123xfQfWtjTvKyAmMBLTw62BQRKXoBHRtXeLFxGkPSLC9gcuBWj16siTbvhw7kacqtQWYa7LQNVJMFNxAAfsD7ag6gE24siJZvL1QyMPfB1HGh5C38ShM");
+          "GUsRsanpcLbX9p8gHm8KubMesPHnMn7mhJz48jxkYPZ5SPfqiKCCkd4d1jycAN79DEAkHfmqMedR3HknQGgfHLB7VyWuQbdsDir3nFHh7FE28HWL2MbmRVHxcNa4dv16tqUDfEeUSGE3t5hxWBu6TnFzZGKh6ugnHnveefSU5naU8r9bxA4f813U91wLVAdxw64YhXQEzvSDtVL52eqLLttxMQunaLemu7K26YfTqVLsZ76UVcFUuhCxHpSQWDrNFheSHBjmyvJwFuncBezqsXV64mGcw1khRiLmYRBzUrxSY2GnuSHSyXi9aov1tWqQnJ6gvQF5SzA2");
 
   bool hasPeers = false;
 
@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _beaconPlugin.getBeaconResponse().listen(
       (data) {
         setState(() {
-          value = data.toString();
+          value = data;
         });
       },
     );

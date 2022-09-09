@@ -245,6 +245,7 @@ class BeaconConnectService{
     }
     
     func tezosResponse(call: FlutterMethodCall, completion: @escaping Completion<Void>) {
+        // TODO(bibash): compare request.id with awaitingRequest.id
         if let request = awaitingRequest {
             awaitingRequest = nil
             do {
