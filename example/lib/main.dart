@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final TextEditingController pairingRequestController = TextEditingController(
       text:
-          "GUsRsanpcLZ848s29sF7M9wTCjuHKqs85D2sPm2tdoAdfyhWN9uBhGrHrKq26BSDdaBkK9XZKgRXSShoq7ErPcV8LUnv2xtSa1BHhr9jo9nuXUxHJNLirdtpvNcoa9p711RBDMJ1g9u7W2FMWsVMUAZhaCbTDe45JbUeiQwG3VFU4KbqVH1FYqEhS2NS8DKkJXJtUsguHaAU46oeBGCUHzqaLneSJpBiYfbXHfT7kuPkJk4vxDGyxnH8zREjx5268ciF7mmCLeSYU39sYmgTrWhbAt4oRA4aswXUnrGaZ56CVcFFr6Zno6HNsrM2z1n3EmPsAzNQWKot");
+          "GUsRsanpcLbPrqJG3e5eXHNA6xq591LMcyRg1CSuTEkAHev55UjaDY8sy8WnVjzUHCZqVt21JNgYEP13UDGwqLLgosgEA8YJfKDqupJk11mKtdwpSes1HjdWg9gXNbypPEkchigJXvuNL3qa1KFmztkt3X2DrfkwDeHhxTKo3Fq4GY5QKniJwN6EcRPPspE8AgTwmxMPttzVC4eUtAj1xyT3Nd5eqFhZLwqBztv9SVHhvnngb8n2csqzeGz1cWStx2N9i1ThvnNi6xTUsVu857oi3tKPAgQY4ummCxmAPWwsX4YEQ8TsyqTmzmxpsXd25nZiC1kiL9aF");
 
   bool hasPeers = false;
 
@@ -63,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
       (data) {
         setState(() {
           value = data;
+          print(jsonEncode(value));
         });
       },
     );

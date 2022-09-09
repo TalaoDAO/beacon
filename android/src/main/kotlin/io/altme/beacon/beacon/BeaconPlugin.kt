@@ -111,7 +111,7 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                     withContext(Dispatchers.Main) {
                         val map: HashMap<String, Any> = HashMap()
 
-                        map["request"] = Gson().toJson(request)
+                        map["request"] = request
 
                         when (request) {
                             is PermissionTezosRequest -> {
@@ -128,7 +128,8 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                             }
                             else -> {}
                         }
-                        events?.success(map.toString())
+
+                        events?.success(Gson().toJson(map))
                     }
                 }
         }
