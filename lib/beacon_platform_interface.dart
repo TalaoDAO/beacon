@@ -81,6 +81,6 @@ abstract class BeaconPlatform extends PlatformInterface {
 
   Future<Map> operationResponse(
       {required String id, required String transactionHash}) {
-    throw UnimplementedError('getPeers() has not been implemented.');
+    throw UnimplementedError('operationResponse() has not been implemented.');
   }
 }
