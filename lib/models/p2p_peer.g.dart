@@ -7,13 +7,13 @@ part of 'p2p_peer.dart';
 // **************************************************************************
 
 P2PPeer _$P2PPeerFromJson(Map<String, dynamic> json) => P2PPeer(
-      json['id'] as String,
-      json['name'] as String,
-      json['publicKey'] as String,
-      json['relayServer'] as String,
-      json['version'] as String,
-      json['icon'] as String?,
-      json['appURL'] as String?,
+      id: json['id'] as String,
+      name: json['name'] as String,
+      publicKey: json['publicKey'] as String,
+      relayServer: json['relayServer'] as String,
+      version: json['version'] as String,
+      icon: json['icon'] as String?,
+      appURL: json['appURL'] as String?,
     );
 
 Map<String, dynamic> _$P2PPeerToJson(P2PPeer instance) => <String, dynamic>{

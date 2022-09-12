@@ -145,8 +145,7 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     private var publisher = MutableSharedFlow<BeaconRequest>()
 
     private fun startBeacon(result: Result) {
-        CoroutineScope(Dispatchers.IO).launch {
-            beaconClient?.stop()
+        CoroutineScope(Dispatchers.IO).launch { 
             beaconClient = BeaconWalletClient("Altme") {
                 support(tezos(), substrate())
                 use(p2pMatrix())

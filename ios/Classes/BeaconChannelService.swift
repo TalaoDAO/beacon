@@ -19,9 +19,10 @@ class BeaconConnectService{
     
     func startBeacon() -> AnyPublisher<Void, Error>  {
         return Future<Void, Error> { [self] (promise) in
-            do {
-                beaconClient?.disconnect {
-                    print("disconnected \($0)")
+            do { 
+                guard beaconClient == nil else {
+                    listenForRequests()
+                    return
                 }
                 
                 Beacon.WalletClient.create(

@@ -4,15 +4,15 @@ part 'p2p_peer.g.dart';
 
 @JsonSerializable()
 class P2PPeer {
-  P2PPeer(
-    this.id,
-    this.name,
-    this.publicKey,
-    this.relayServer,
-    this.version,
-    this.icon,
-    this.appURL,
-  );
+  P2PPeer({
+    required this.id,
+    required this.name,
+    required this.publicKey,
+    required this.relayServer,
+    required this.version,
+    required this.icon,
+    required this.appURL,
+  });
 
   factory P2PPeer.fromJson(Map<String, dynamic> json) =>
       _$P2PPeerFromJson(json);

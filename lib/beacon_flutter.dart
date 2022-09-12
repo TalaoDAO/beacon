@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'beacon_platform_interface.dart';
-import 'package:base_codecs/base_codecs.dart';
+export 'enums/enums.dart';
 export 'models/models.dart';
+import 'package:base_codecs/base_codecs.dart';
 
 class Beacon {
   Future<Map> startBeacon() async {
