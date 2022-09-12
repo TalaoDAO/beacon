@@ -127,7 +127,3 @@ app.*.map.json
 !.idea/codeStyles/
 !.idea/dictionaries/
 !.idea/runConfigurations/
-
-#build_runner
-*.g.dart
-*.freezed.dart

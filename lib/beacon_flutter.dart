@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'beacon_platform_interface.dart';
 import 'package:base_codecs/base_codecs.dart';
+export 'models/models.dart';
 
 class Beacon {
   Future<Map> startBeacon() async {
