@@ -75,12 +75,12 @@ abstract class BeaconPlatform extends PlatformInterface {
   }
 
   Future<Map> signPayloadResponse(
-      {required String id, required String signature}) async {
+      {required String id, required String? signature}) async {
     throw UnimplementedError('signPayloadResponse() has not been implemented.');
   }
 
   Future<Map> operationResponse(
-      {required String id, required String transactionHash}) {
+      {required String id, required String? transactionHash}) {
     throw UnimplementedError('operationResponse() has not been implemented.');
   }
 }

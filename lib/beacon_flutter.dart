@@ -82,13 +82,13 @@ class Beacon {
   }
 
   Future<Map> signPayloadResponse(
-      {required String id, required String signature}) async {
+      {required String id, required String? signature}) async {
     return await BeaconPlatform.instance
         .signPayloadResponse(id: id, signature: signature);
   }
 
   Future<Map> operationResponse(
-      {required String id, required String transactionHash}) async {
+      {required String id, required String? transactionHash}) async {
     return await BeaconPlatform.instance
         .operationResponse(id: id, transactionHash: transactionHash);
   }

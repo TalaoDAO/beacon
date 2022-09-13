@@ -108,7 +108,7 @@ class MethodChannelBeacon extends BeaconPlatform {
 
   @override
   Future<Map> signPayloadResponse(
-      {required String id, required String signature}) async {
+      {required String id, required String? signature}) async {
     Map<String, dynamic> args = <String, dynamic>{};
     args.putIfAbsent("id", () => id);
     args.putIfAbsent("signature", () => signature);
@@ -118,7 +118,7 @@ class MethodChannelBeacon extends BeaconPlatform {
 
   @override
   Future<Map> operationResponse(
-      {required String id, required String transactionHash}) async {
+      {required String id, required String? transactionHash}) async {
     Map<String, dynamic> args = <String, dynamic>{};
     args.putIfAbsent("id", () => id);
     args.putIfAbsent("transactionHash", () => transactionHash);
