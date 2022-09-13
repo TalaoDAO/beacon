@@ -95,8 +95,8 @@ class MethodChannelBeacon extends BeaconPlatform {
   @override
   Future<Map> permissionResponse({
     required String id,
-    required String publicKey,
-    required String address,
+    required String? publicKey,
+    required String? address,
   }) async {
     Map<String, dynamic> args = <String, dynamic>{};
     args.putIfAbsent("id", () => id);

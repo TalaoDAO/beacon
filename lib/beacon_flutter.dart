@@ -74,8 +74,8 @@ class Beacon {
 
   Future<Map> permissionResponse({
     required String id,
-    required String publicKey,
-    required String address,
+    required String? publicKey,
+    required String? address,
   }) async {
     return await BeaconPlatform.instance
         .permissionResponse(id: id, publicKey: publicKey, address: address);

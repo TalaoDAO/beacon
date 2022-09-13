@@ -68,8 +68,8 @@ abstract class BeaconPlatform extends PlatformInterface {
 
   Future<Map> permissionResponse({
     required String id,
-    required String publicKey,
-    required String address,
+    required String? publicKey,
+    required String? address,
   }) async {
     throw UnimplementedError('permissionResponse() has not been implemented.');
   }
