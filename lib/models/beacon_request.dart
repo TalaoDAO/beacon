@@ -22,6 +22,7 @@ class BeaconRequest {
 @JsonSerializable()
 class Request {
   Request({
+    /// permission
     this.id,
     this.origin,
     this.scopes,
@@ -30,11 +31,17 @@ class Request {
     this.senderId,
     this.network,
     this.appMetadata,
+
+    /// signInPayLoad extra fields
+    this.sourceAddress,
+    this.senderID,
+    this.signingType,
   });
 
   factory Request.fromJson(Map<String, dynamic> json) =>
       _$RequestFromJson(json);
 
+  /// permission
   String? id;
   Destination? origin;
   List<String>? scopes;
@@ -43,6 +50,11 @@ class Request {
   String? senderId;
   Network? network;
   AppMetadata? appMetadata;
+
+  /// signInPayLoad extra fields
+  String? sourceAddress;
+  String? senderID;
+  String? signingType;
 
   Map<String, dynamic> toJson() => _$RequestToJson(this);
 }

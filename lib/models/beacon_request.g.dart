@@ -45,6 +45,9 @@ Request _$RequestFromJson(Map<String, dynamic> json) => Request(
       appMetadata: json['appMetadata'] == null
           ? null
           : AppMetadata.fromJson(json['appMetadata'] as Map<String, dynamic>),
+      sourceAddress: json['sourceAddress'] as String?,
+      senderID: json['senderID'] as String?,
+      signingType: json['signingType'] as String?,
     );
 
 Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
@@ -56,6 +59,9 @@ Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
       'senderId': instance.senderId,
       'network': instance.network,
       'appMetadata': instance.appMetadata,
+      'sourceAddress': instance.sourceAddress,
+      'senderID': instance.senderID,
+      'signingType': instance.signingType,
     };
 
 AppMetadata _$AppMetadataFromJson(Map<String, dynamic> json) => AppMetadata(
