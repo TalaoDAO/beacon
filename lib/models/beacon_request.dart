@@ -36,6 +36,7 @@ class Request {
     this.sourceAddress,
     this.senderID,
     this.signingType,
+    this.payload,
   });
 
   factory Request.fromJson(Map<String, dynamic> json) =>
@@ -55,6 +56,7 @@ class Request {
   String? sourceAddress;
   String? senderID;
   String? signingType;
+  String? payload;
 
   Map<String, dynamic> toJson() => _$RequestToJson(this);
 }

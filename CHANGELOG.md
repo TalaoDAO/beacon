@@ -11,3 +11,10 @@
 
 ## 0.0.3
 * update readme
+
+## 0.0.4
+* license update
+* add models
+* permission response
+* signing response
+* operation response
