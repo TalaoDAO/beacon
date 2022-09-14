@@ -49,6 +49,9 @@ Request _$RequestFromJson(Map<String, dynamic> json) => Request(
       senderID: json['senderID'] as String?,
       signingType: json['signingType'] as String?,
       payload: json['payload'] as String?,
+      operationDetails: (json['operationDetails'] as List<dynamic>?)
+          ?.map((e) => OperationDetails.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
@@ -64,6 +67,7 @@ Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
       'senderID': instance.senderID,
       'signingType': instance.signingType,
       'payload': instance.payload,
+      'operationDetails': instance.operationDetails,
     };
 
 AppMetadata _$AppMetadataFromJson(Map<String, dynamic> json) => AppMetadata(

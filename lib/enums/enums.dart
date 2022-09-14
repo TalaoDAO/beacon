@@ -4,3 +4,12 @@ enum RequestType {
   operation,
   broadcast,
 }
+
+enum OperationKind {
+  generic,
+  transaction,
+  delegation,
+  origination,
+  transfer,
+  reveal,
+}
