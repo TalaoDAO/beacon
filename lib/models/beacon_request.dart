@@ -109,7 +109,7 @@ class Network {
   factory Network.fromJson(Map<String, dynamic> json) =>
       _$NetworkFromJson(json);
 
-  String? type;
+  NetworkType? type;
   String? rpcUrl;
 
   Map<String, dynamic> toJson() => _$NetworkToJson(this);

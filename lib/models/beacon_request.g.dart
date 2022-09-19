@@ -93,11 +93,26 @@ Map<String, dynamic> _$DestinationToJson(Destination instance) =>
     };
 
 Network _$NetworkFromJson(Map<String, dynamic> json) => Network(
-      type: json['type'] as String?,
+      type: $enumDecodeNullable(_$NetworkTypeEnumMap, json['type']),
       rpcUrl: json['rpcUrl'] as String?,
     );
 
 Map<String, dynamic> _$NetworkToJson(Network instance) => <String, dynamic>{
-      'type': instance.type,
+      'type': _$NetworkTypeEnumMap[instance.type],
       'rpcUrl': instance.rpcUrl,
     };
+
+const _$NetworkTypeEnumMap = {
+  NetworkType.mainnet: 'mainnet',
+  NetworkType.ghostnet: 'ghostnet',
+  NetworkType.mondaynet: 'mondaynet',
+  NetworkType.delphinet: 'delphinet',
+  NetworkType.edonet: 'edonet',
+  NetworkType.florencenet: 'florencenet',
+  NetworkType.granadanet: 'granadanet',
+  NetworkType.hangzhounet: 'hangzhounet',
+  NetworkType.ithacanet: 'ithacanet',
+  NetworkType.jakartanet: 'jakartanet',
+  NetworkType.kathmandunet: 'kathmandunet',
+  NetworkType.custom: 'custom',
+};

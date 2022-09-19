@@ -1,3 +1,5 @@
+import 'package:json_annotation/json_annotation.dart';
+
 enum RequestType {
   permission,
   signPayload,
@@ -12,4 +14,19 @@ enum OperationKind {
   origination,
   transfer,
   reveal,
+}
+
+enum NetworkType {
+  mainnet,
+  ghostnet,
+  mondaynet,
+  delphinet,
+  edonet,
+  florencenet,
+  granadanet,
+  hangzhounet,
+  ithacanet,
+  jakartanet,
+  kathmandunet,
+  custom,
 }
