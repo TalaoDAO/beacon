@@ -12,12 +12,16 @@ BeaconRequest _$BeaconRequestFromJson(Map<String, dynamic> json) =>
       request: json['request'] == null
           ? null
           : Request.fromJson(json['request'] as Map<String, dynamic>),
+      operationDetails: (json['operationDetails'] as List<dynamic>?)
+          ?.map((e) => OperationDetails.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$BeaconRequestToJson(BeaconRequest instance) =>
     <String, dynamic>{
       'type': _$RequestTypeEnumMap[instance.type],
       'request': instance.request,
+      'operationDetails': instance.operationDetails,
     };
 
 const _$RequestTypeEnumMap = {
@@ -49,9 +53,6 @@ Request _$RequestFromJson(Map<String, dynamic> json) => Request(
       senderID: json['senderID'] as String?,
       signingType: json['signingType'] as String?,
       payload: json['payload'] as String?,
-      operationDetails: (json['operationDetails'] as List<dynamic>?)
-          ?.map((e) => OperationDetails.fromJson(e as Map<String, dynamic>))
-          .toList(),
     );
 
 Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
@@ -67,7 +68,6 @@ Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
       'senderID': instance.senderID,
       'signingType': instance.signingType,
       'payload': instance.payload,
-      'operationDetails': instance.operationDetails,
     };
 
 AppMetadata _$AppMetadataFromJson(Map<String, dynamic> json) => AppMetadata(

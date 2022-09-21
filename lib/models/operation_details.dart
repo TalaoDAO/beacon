@@ -9,6 +9,15 @@ class OperationDetails {
     this.kind,
     this.amount,
     this.destination,
+    this.source,
+    this.gasLimit,
+    this.storageLimit,
+    this.fee,
+    this.counter,
+    this.entrypoint,
+    this.code,
+    this.storage,
+    this.parameters,
   });
 
   factory OperationDetails.fromJson(Map<String, dynamic> json) =>
@@ -17,6 +26,15 @@ class OperationDetails {
   OperationKind? kind;
   String? amount;
   String? destination;
+  String? source;
+  String? gasLimit;
+  String? storageLimit;
+  String? fee;
+  String? counter;
+  String? entrypoint;
+  List<dynamic>? code;
+  dynamic storage;
+  dynamic parameters;
 
   Map<String, dynamic> toJson() => _$OperationDetailsToJson(this);
 }

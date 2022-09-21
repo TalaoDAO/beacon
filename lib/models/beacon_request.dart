@@ -8,6 +8,9 @@ class BeaconRequest {
   BeaconRequest({
     this.type,
     this.request,
+
+    /// operation extra fields
+    this.operationDetails,
   });
 
   factory BeaconRequest.fromJson(Map<String, dynamic> json) =>
@@ -15,6 +18,9 @@ class BeaconRequest {
 
   RequestType? type;
   Request? request;
+
+  /// operation extra fields
+  List<OperationDetails>? operationDetails;
 
   Map<String, dynamic> toJson() => _$BeaconRequestToJson(this);
 }
@@ -37,9 +43,6 @@ class Request {
     this.senderID,
     this.signingType,
     this.payload,
-
-    /// operation extra fields
-    this.operationDetails,
   });
 
   factory Request.fromJson(Map<String, dynamic> json) =>
@@ -60,9 +63,6 @@ class Request {
   String? senderID;
   String? signingType;
   String? payload;
-
-  /// operation extra fields
-  List<OperationDetails>? operationDetails;
 
   Map<String, dynamic> toJson() => _$RequestToJson(this);
 }

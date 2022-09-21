@@ -121,7 +121,113 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                                 map["type"] = "signPayload"
                             }
                             is OperationTezosRequest -> {
+                                val operationRequest: OperationTezosRequest = request
+
                                 map["type"] = "operation"
+
+                                fun getParams(value: MichelineMichelsonV1Expression): Any {
+                                    val result: HashMap<String, Any> = HashMap()
+
+                                    when (value) {
+                                        is MichelinePrimitiveApplication -> {
+                                            result["prim"] = value.prim
+                                            value.args?.map { arg -> getParams(arg) }?.let {
+                                                result["args"] = it
+                                            }
+                                            value.annots?.let {
+                                                result["annots"] = it
+                                            }
+                                        }
+                                        is MichelinePrimitiveInt -> {
+                                            result["int"] = value.int
+                                        }
+                                        is MichelinePrimitiveString -> {
+                                            result["string"] = value.string
+                                        }
+                                        is MichelinePrimitiveBytes -> {
+                                            result["bytes"] =
+                                                HexString(value.bytes).asString(withPrefix = false)
+                                        }
+                                        is MichelineNode -> {
+                                            return value.expressions.map { arg -> getParams(arg) }
+                                        }
+                                    }
+
+                                    return result
+                                }
+
+                                val operationDetails: ArrayList<HashMap<String, Any>> = ArrayList()
+                                operationRequest.operationDetails.forEach { operation ->
+                                    if (operation.kind == TezosOperation.Kind.Origination) {
+                                        (operation as? TezosOriginationOperation)?.let { origination ->
+                                            val detail: HashMap<String, Any> = HashMap()
+                                            detail["kind"] = "origination"
+                                            origination.source?.let {
+                                                detail["source"] = it
+                                            }
+                                            origination.gasLimit?.let {
+                                                detail["gasLimit"] = it
+                                            }
+                                            origination.storageLimit?.let {
+                                                detail["storageLimit"] = it
+                                            }
+                                            origination.fee?.let {
+                                                detail["fee"] = it
+                                            }
+                                            origination.balance.let {
+                                                detail["amount"] = it
+                                            }
+                                            origination.counter?.let {
+                                                detail["counter"] = it
+                                            }
+                                            detail["code"] = getParams(origination.script.code)
+                                            detail["storage"] = getParams(origination.script.storage)
+
+                                            operationDetails.add(detail)
+                                        }
+                                    } else {
+                                        (operation as? TezosTransactionOperation)?.let { transaction ->
+                                            val detail: HashMap<String, Any> = HashMap()
+                                            detail["kind"] = "transaction"
+                                            transaction.destination.let {
+                                                detail["destination"] = it
+                                            }
+                                            transaction.source?.let {
+                                                detail["source"] = it
+                                            }
+                                            transaction.gasLimit?.let {
+                                                detail["gasLimit"] = it
+                                            }
+                                            transaction.storageLimit?.let {
+                                                detail["storageLimit"] = it
+                                            }
+                                            transaction.fee?.let {
+                                                detail["fee"] = it
+                                            }
+                                            transaction.amount.let {
+                                                detail["amount"] = it
+                                            }
+                                            transaction.counter?.let {
+                                                detail["counter"] = it
+                                            }
+                                            transaction.parameters?.entrypoint?.let {
+                                                detail["entrypoint"] = it
+                                            }
+                                            transaction.parameters?.value?.let { value ->
+                                                getParams(
+                                                    value
+                                                )
+                                            }
+                                                ?.let {
+                                                    detail["parameters"] = it
+                                                }
+
+                                            operationDetails.add(detail)
+                                        }
+                                    }
+                                }
+
+                                map["operationDetails"] = operationDetails
                             }
                             is BroadcastTezosRequest -> {
                                 map["type"] = "broadcast"

@@ -211,8 +211,102 @@ extension BeaconChannelHandler: FlutterStreamHandler {
                     switch blockchainRequest {
                     case .signPayload(_):
                         map["type"] = "signPayload"
-                    case .operation(_):
+                    case let .operation(operation):
                         map["type"] = "operation"
+                        
+                        var operationDetails = [[String:Any?]]()
+                        
+                        func getParams(value: Micheline.MichelsonV1Expression) -> Any {
+                            var params: [String: Any] = [:]
+
+                            switch value {
+                            case let .literal(literal):
+                                switch literal {
+                                case .string(let string):
+                                    params["string"] = string
+                                case .int(let value):
+                                    params["int"] = value
+                                case .bytes(let array):
+                                    params["bytes"] = HexString(from: array).asString(withPrefix: false)
+                                }
+                            case let .prim(prim):
+                                params["prim"] = prim.prim
+                                params["args"] = prim.args?.map({ getParams(value: $0) })
+                                if let annots = prim.annots {
+                                    params["annots"] = annots
+                                }
+                                
+                            case .sequence(let array):
+                                var result = [Any]()
+                                for mv1e in array {
+                                    result.append(getParams(value: mv1e))
+                                }
+
+                                return result
+                            }
+                            
+                            return params
+                        }
+                        
+                        operation.operationDetails.forEach({ operation in
+                            switch operation {
+                            case let .transaction(transaction):
+                                
+                                let entrypoint: String?
+
+                                switch transaction.parameters?.entrypoint {
+                                case let .custom(custom):
+                                    entrypoint = custom
+                                case let .common(common):
+                                    entrypoint = common.rawValue
+                                case .none:
+                                    entrypoint = nil
+                                }
+                                
+                                let params: Any?
+                                if let value = transaction.parameters?.value {
+                                    params = getParams(value: value)
+                                } else {
+                                    params = nil
+                                }
+                                
+                                let detail: [String : Any?] = [
+                                    "kind": "transaction",
+                                    "source": transaction.source,
+                                    "gasLimit": transaction.gasLimit,
+                                    "storageLimit": transaction.storageLimit,
+                                    "fee": transaction.fee,
+                                    "amount": transaction.amount,
+                                    "counter": transaction.counter,
+                                    "destination": transaction.destination,
+                                    "entrypoint": entrypoint,
+                                    "parameters": params,
+                                ]
+                                operationDetails.append(detail)
+                            case let .origination(origination):
+                                let code = getParams(value: origination.script.code)
+                                let storage = getParams(value: origination.script.storage)
+                                
+                                let detail: [String : Any?] = [
+                                    "kind": "origination",
+                                    "source": origination.source,
+                                    "gasLimit": origination.gasLimit,
+                                    "storageLimit": origination.storageLimit,
+                                    "fee": origination.fee,
+                                    "balance": origination.balance,
+                                    "counter": origination.counter,
+                                    "code": code,
+                                    "storage": storage,
+                                ]
+                                operationDetails.append(detail)
+                            default:
+                                break
+                            }
+                        })
+
+                        
+                        map["operationDetails"] = operationDetails
+                        
                     case .broadcast(_):
                         map["type"] = "broadcast"
                         break;
