@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'beacon_flutter'
-  s.version          = '0.0.45'
+  s.version          = '0.0.5'
   s.summary          = 'The Beacon Flutter Plugin provides Flutter developers with tools useful for setting up communication between native wallets supporting Tezos and dApps that implement beacon-sdk.'
   s.description      = <<-DESC
 A new Flutter beacon plugin.
