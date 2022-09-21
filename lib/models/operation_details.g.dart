@@ -17,7 +17,9 @@ OperationDetails _$OperationDetailsFromJson(Map<String, dynamic> json) =>
       fee: json['fee'] as String?,
       counter: json['counter'] as String?,
       entrypoint: json['entrypoint'] as String?,
-      code: json['code'] as List<dynamic>?,
+      code: (json['code'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
+          .toList(),
       storage: json['storage'],
       parameters: json['parameters'],
     );

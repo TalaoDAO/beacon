@@ -32,7 +32,7 @@ class OperationDetails {
   String? fee;
   String? counter;
   String? entrypoint;
-  List<dynamic>? code;
+  List<Map<String, dynamic>>? code;
   dynamic storage;
   dynamic parameters;
 
