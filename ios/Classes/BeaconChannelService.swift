@@ -198,6 +198,23 @@ class BeaconConnectService{
         .eraseToAnyPublisher()
     }
     
+    
+    func getPeer(publicKey: String) -> AnyPublisher<Beacon.Peer, Error> {
+        return Future<Beacon.Peer, Error> { [self] (promise) in
+            guard let beaconDappClient = beaconClient else { return }
+            beaconDappClient.storageManager.findPeers(where: { $0.publicKey == publicKey }) { result in
+                switch result {
+                case let .success(peer):
+                    promise(.success(peer!))
+                case let .failure(error):
+                    promise(.failure(error))
+                }
+
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
     func pause() -> AnyPublisher<Void, Error> {
         return Future<Void, Error> { [self] (promise) in
             self.beaconClient?.pause() { result in
@@ -438,3 +455,5 @@ extension OperationTezosRequest {
         .error(ErrorBeaconResponse(id: id, version: version, destination: origin, errorType: .aborted))
     }
 }
+
+ 

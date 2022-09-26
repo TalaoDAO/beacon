@@ -15,6 +15,9 @@ BeaconRequest _$BeaconRequestFromJson(Map<String, dynamic> json) =>
       operationDetails: (json['operationDetails'] as List<dynamic>?)
           ?.map((e) => OperationDetails.fromJson(e as Map<String, dynamic>))
           .toList(),
+      peer: json['peer'] == null
+          ? null
+          : P2PPeer.fromJson(json['peer'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$BeaconRequestToJson(BeaconRequest instance) =>
@@ -22,6 +25,7 @@ Map<String, dynamic> _$BeaconRequestToJson(BeaconRequest instance) =>
       'type': _$RequestTypeEnumMap[instance.type],
       'request': instance.request,
       'operationDetails': instance.operationDetails,
+      'peer': instance.peer,
     };
 
 const _$RequestTypeEnumMap = {

@@ -202,10 +202,23 @@ extension BeaconChannelHandler: FlutterStreamHandler {
                 var map: [String : Any] = [
                     "request": requestDataDictionary
                 ]
+                
 
                 switch request {
                 case .permission(_):
                     map["type"] = "permission"
+                    
+                    let peerPublicKey = request.origin.id
+                    print(peerPublicKey)
+                    BeaconConnectService.shared.getPeer(publicKey: peerPublicKey)
+                        .tryMap { try JSONEncoder().encode($0) }
+                        .map { String(data: $0, encoding: .utf8) }
+                        .sink(receiveCompletion: {  (completion) in
+                            //NOTHING
+                        }, receiveValue: { peer in
+                            map["peer"] = peer!.dictionary()!
+                        })
+                        .store(in: &self.cancelBag)
 
                 case let .blockchain(blockchainRequest):
                     switch blockchainRequest {

@@ -116,6 +116,13 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                         when (request) {
                             is PermissionTezosRequest -> {
                                 map["type"] = "permission"
+
+                                val peerPublicKey = request.origin.id
+
+                                val peers =
+                                    beaconClient?.getPeers();
+                                val peer = peers!!.first  { peer -> peer.publicKey == peerPublicKey }
+                                map["peer"] = peer
                             }
                             is SignPayloadTezosRequest -> {
                                 map["type"] = "signPayload"

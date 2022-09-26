@@ -10,8 +10,9 @@ class P2PPeer {
     required this.publicKey,
     required this.relayServer,
     required this.version,
-    required this.icon,
-    required this.appURL,
+    this.icon,
+    this.appURL,
+    this.isPaired,
   });
 
   factory P2PPeer.fromJson(Map<String, dynamic> json) =>
@@ -24,6 +25,7 @@ class P2PPeer {
   final String version;
   final String? icon;
   final String? appURL;
+  final bool? isPaired;
 
   Map<String, dynamic> toJson() => _$P2PPeerToJson(this);
 }

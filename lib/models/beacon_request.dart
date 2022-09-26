@@ -11,6 +11,9 @@ class BeaconRequest {
 
     /// operation extra fields
     this.operationDetails,
+
+    /// permission extra fields
+    this.peer,
   });
 
   factory BeaconRequest.fromJson(Map<String, dynamic> json) =>
@@ -21,6 +24,9 @@ class BeaconRequest {
 
   /// operation extra fields
   List<OperationDetails>? operationDetails;
+
+  /// permission extra fields
+  P2PPeer? peer;
 
   Map<String, dynamic> toJson() => _$BeaconRequestToJson(this);
 }
@@ -94,6 +100,8 @@ class Destination {
       _$DestinationFromJson(json);
 
   String? kind;
+
+  /// publicKey
   String? id;
 
   Map<String, dynamic> toJson() => _$DestinationToJson(this);

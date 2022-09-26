@@ -14,6 +14,7 @@ P2PPeer _$P2PPeerFromJson(Map<String, dynamic> json) => P2PPeer(
       version: json['version'] as String,
       icon: json['icon'] as String?,
       appURL: json['appURL'] as String?,
+      isPaired: json['isPaired'] as bool?,
     );
 
 Map<String, dynamic> _$P2PPeerToJson(P2PPeer instance) => <String, dynamic>{
@@ -24,4 +25,5 @@ Map<String, dynamic> _$P2PPeerToJson(P2PPeer instance) => <String, dynamic>{
       'version': instance.version,
       'icon': instance.icon,
       'appURL': instance.appURL,
+      'isPaired': instance.isPaired,
     };
