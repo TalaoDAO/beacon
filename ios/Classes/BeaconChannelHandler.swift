@@ -64,7 +64,7 @@ class BeaconChannelHandler: NSObject {
             }, receiveValue: { serializedPeer in
                 result([
                     "success": true,
-                    "peer": serializedPeer as Any
+                    "peer": serializedPeer!.dictionary()!
                 ])
             })
             .store(in: &cancelBag)
@@ -104,17 +104,25 @@ class BeaconChannelHandler: NSObject {
     
     func getPeers(result: @escaping FlutterResult) {
         BeaconConnectService.shared.getPeers()
-            .tryMap { try JSONEncoder().encode($0) }
-            .map { String(data: $0, encoding: .utf8) }
             .sink(receiveCompletion: {  (completion) in
                 result([
                     "success": false,
                     "message": "Failed to fetch"
                 ])
             }, receiveValue: { serializedPeers in
+                
+                var list = [Any]()
+                for peer in serializedPeers {
+                    let encoder = JSONEncoder()
+                    
+                    let data = try? encoder.encode(peer)
+                    let requestData = data.flatMap { String(data: $0, encoding: .utf8) }
+                    let requestDataDictionary = requestData!.dictionary()!
+                    list.append(requestDataDictionary)
+                }
                 result([
                     "success": true,
-                    "peer": serializedPeers as Any
+                    "peer":  list
                 ])
             })
             .store(in: &cancelBag)
@@ -343,7 +351,6 @@ extension BeaconChannelHandler: FlutterStreamHandler {
 }
 
 extension Dictionary {
-
     var json: String {
         let invalidJson = "Not a valid JSON"
         do {
@@ -373,3 +380,5 @@ extension String{
        return nil
    }
 }
+
+
