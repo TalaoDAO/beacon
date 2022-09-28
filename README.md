@@ -69,6 +69,211 @@ buildTypes {
     }
 }
 ```
+## What 
+
+What can you do with this package?. 
+### Starting beacon and listen to response
+```dart 
+await _beaconPlugin.startBeacon();  
+Future.delayed(const Duration(seconds: 1), (){
+  _beaconPlugin.getBeaconResponse().listen(
+    (data) {
+        final Map<String, dynamic> requestJson =
+            jsonDecode(data) as Map<String, dynamic>;
+        final BeaconRequest beaconRequest =
+            BeaconRequest.fromJson(requestJson);
+            
+        switch (beaconRequest.type) {
+          case RequestType.permission:
+            ...
+            break;
+          case RequestType.signPayload:
+            ...
+            break;
+          case RequestType.operation:
+            ...
+            break;
+          case RequestType.broadcast:
+            ...
+            break;
+        }
+    },
+  );
+}); 
+```
+
+### Pairing wallet with dApp
+```dart 
+try {  
+  ...
+  final Map response = await _beaconPlugin.pair(pairingRequest: pairingRequest);
+
+  final bool success = json.decode(response['success'].toString()) as bool;
+
+  if (success) {
+      ...
+  } else {
+    throw ...;
+  }
+} catch (e) {
+  ...
+}
+```
+
+### Pairing wallet with dApp using addPeer
+```dart 
+try {  
+  ...
+  final Map response = await _beaconPlugin.addPeer(pairingRequest: pairingRequest);
+
+  final bool success = json.decode(response['success'].toString()) as bool;
+
+  if (success) {
+      ...
+  } else {
+    throw ...;
+  }
+} catch (e) {
+  ...
+} 
+```
+
+### convert pairingRequest to P2P
+```dart
+pairingRequestToP2P(pairingRequest: pairingRequest);  
+```
+
+### Disconnecting with dApp
+```dart  
+try {  
+  ...
+  final Map response = await _beaconPlugin.removePeerUsingPublicKey(publicKey: publicKey));
+
+  final bool success = json.decode(response['success'].toString()) as bool;
+
+  if (success) {
+      ...
+  } else {
+    throw ...;
+  }
+} catch (e) {
+  ...
+}
+```
+
+### Disconnecting with all dApps
+```dart 
+Future<void> removePeers() async {
+  try {  
+    ...
+    final Map response = await _beaconPlugin.removePeers());
+
+    final bool success = json.decode(response['success'].toString()) as bool;
+
+    if (success) {
+       ...
+    } else {
+      throw ...;
+    }
+  } catch (e) {
+    ...
+  }
+}
+```
+
+### Sending permission response to dApp
+```dart 
+try {  
+  ...
+  final Map response = await _beaconPlugin.permissionResponse(
+    id: beaconRequest!.request!.id!,
+    publicKey: publicKey, // publicKey of crypto account
+    address: walletAddress, // walletAddress of crypto account
+  );
+
+  final bool success = json.decode(response['success'].toString()) as bool;
+
+  if (success) {
+      ...
+  } else {
+    throw ...;
+  }
+} catch (e) {
+  ...
+} 
+```
+
+### Reject permission response to dApp
+```dart 
+_beaconPlugin.permissionResponse(
+  id: beaconRequest!.request!.id!,
+  publicKey: null,
+  address: null,
+); 
+```
+
+### Sending sigin payload response to dApp
+```dart 
+try {  
+  ...
+  //create signature using payload
+
+  final Map response = await _beaconPlugin.signPayloadResponse(
+    id: beaconRequest!.request!.id!,
+    signature: signature,
+  );
+
+  final bool success = json.decode(response['success'].toString()) as bool;
+
+  if (success) {
+      ...
+  } else {
+    throw ...;
+  }
+} catch (e) {
+  ...
+} 
+```
+
+### Reject sigin payload response to dApp
+```dart 
+_beaconPlugin.signPayloadResponse(
+  id: beaconRequest!.request!.id!,
+  signature: null,
+);
+``` 
+
+## Sending operation response to dApp
+```dart 
+try {  
+  ...
+  // get transactionHash from the operation
+
+  final Map response = await _beaconPlugin.operationResponse(
+    id: beaconRequest!.request!.id!,
+    transactionHash: transactionHash,
+  );
+
+  final bool success = json.decode(response['success'].toString()) as bool;
+
+  if (success) {
+      ...
+  } else {
+    throw ...;
+  }
+} catch (e) {
+  ...
+} 
+```
+
+## Reject operation response to dApp
+```dart 
+_beaconPlugin.operationResponse(
+  id: beaconRequest!.request!.id!,
+  transactionHash: null,
+);
+```
+
 
 ## Example
 ```dart
@@ -257,8 +462,12 @@ class _MyHomePageState extends State<MyHomePage> {
 ```
 # Reference
 
-[Beacon Android SDK](https://github.com/airgap-it/beacon-android-sdk)
-[Beacon IOS SDK](https://github.com/airgap-it/beacon-ios-sdk)
-[Naan](https://github.com/Tezsure/naan-wallet-1.0)
-[Autonomy](https://github.com/bitmark-inc/autonomy-client)
+* [Beacon Android SDK](https://github.com/airgap-it/beacon-android-sdk)
+* [Beacon IOS SDK](https://github.com/airgap-it/beacon-ios-sdk)
+* [Naan](https://github.com/Tezsure/naan-wallet-1.0)
+* [Autonomy](https://github.com/bitmark-inc/autonomy-client)
+
+# Author
+
+Beacon Flutter Plugin is developed by [Altme](https://altme.io/).
 
