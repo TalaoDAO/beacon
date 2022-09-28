@@ -121,7 +121,7 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
 
                                 val peers =
                                     beaconClient?.getPeers();
-                                val peer = peers!!.first  { peer -> peer.publicKey == peerPublicKey }
+                                val peer = peers!!.first { peer -> peer.publicKey == peerPublicKey }
                                 map["peer"] = peer
                             }
                             is SignPayloadTezosRequest -> {
@@ -188,7 +188,8 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                                                 detail["counter"] = it
                                             }
                                             detail["code"] = getParams(origination.script.code)
-                                            detail["storage"] = getParams(origination.script.storage)
+                                            detail["storage"] =
+                                                getParams(origination.script.storage)
 
                                             operationDetails.add(detail)
                                         }
@@ -241,7 +242,6 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                             }
                             else -> {}
                         }
-
                         events?.success(Gson().toJson(map))
                     }
                 }
@@ -258,7 +258,7 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     private var publisher = MutableSharedFlow<BeaconRequest>()
 
     private fun startBeacon(result: Result) {
-        CoroutineScope(Dispatchers.IO).launch { 
+        CoroutineScope(Dispatchers.IO).launch {
             beaconClient = BeaconWalletClient("Altme") {
                 support(tezos(), substrate())
                 use(p2pMatrix())
@@ -410,8 +410,12 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
         )
         CoroutineScope(Dispatchers.IO).launch {
             beaconClient?.addPeers(peer)
-            val jsonPeer = Gson().toJson(peer)
-            result.success(mapOf("success" to true, "result" to jsonPeer))
+
+            val map: HashMap<String, Any> = HashMap()
+            map["success"] = true
+            map["result"] = peer
+
+            result.success(Gson().toJson(map))
         }
     }
 
@@ -444,8 +448,13 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     private fun getPeers(result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
             val peers = beaconClient?.getPeers()
-            val jsonPeers = Gson().toJson(peers)
-            result.success(mapOf("success" to true, "result" to jsonPeers))
+
+            val map: HashMap<String, Any> = HashMap()
+            map["success"] = true
+            map["result"] = peers!!
+
+            val response = Gson().toJson(map)
+            result.success(response)
         }
     }
 

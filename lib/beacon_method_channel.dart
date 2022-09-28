@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -39,7 +41,10 @@ class MethodChannelBeacon extends BeaconPlatform {
     args.putIfAbsent("publicKey", () => publicKey);
     args.putIfAbsent("relayServer", () => relayServer);
     args.putIfAbsent("version", () => version);
-    Map data = await methodChannel.invokeMethod('addPeer', args);
+    dynamic data = await methodChannel.invokeMethod('addPeer', args);
+    if (data is String) {
+      return jsonDecode(data);
+    }
     return data;
   }
 
@@ -88,7 +93,10 @@ class MethodChannelBeacon extends BeaconPlatform {
 
   @override
   Future<Map> getPeers() async {
-    Map data = await methodChannel.invokeMethod('getPeers');
+    dynamic data = await methodChannel.invokeMethod('getPeers');
+    if (data is String) {
+      return jsonDecode(data);
+    }
     return data;
   }
 
