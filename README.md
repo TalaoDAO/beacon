@@ -1,6 +1,6 @@
 # Beacon Flutter Plugin
 
-[![pub package](https://img.shields.io/github/v/tag/TalaoDAO/beacon?label=pub)](https://pub.dev/packages/beacon_flutter)
+[![pub package](https://img.shields.io/github/v/tag/TalaoDAO/beacon?label=pub)](https://pub.dev/packages/beacon_flutter)[![GitHub](https://img.shields.io/github/license/TalaoDAO/beacon?color=2196F3)](https://pub.dev/packages/beacon_flutter/license)
 
 > Connect Wallets with dApps on Tezos
 
@@ -505,5 +505,5 @@ class _MyHomePageState extends State<MyHomePage> {
 
 # Author
 
-Beacon Flutter Plugin is developed by [Altme](https://altme.io/).
+Beacon Flutter Plugin is developed by [Altme](https://altme.io/). Please feel free to contact us at <thierry@altme.io>.
 
