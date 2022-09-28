@@ -239,7 +239,7 @@ _beaconPlugin.permissionResponse(
 ); 
 ```
 
-### Sending sigin payload response to dApp
+### Sending sign payload response to dApp
 ```dart 
 try {  
   ...
@@ -262,7 +262,7 @@ try {
 } 
 ```
 
-### Reject sigin payload response to dApp
+### Reject sign payload response to dApp
 ```dart 
 _beaconPlugin.signPayloadResponse(
   id: beaconRequest!.request!.id!,
