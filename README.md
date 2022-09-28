@@ -96,9 +96,9 @@ buildTypes {
     }
 }
 ```
-## What 
+## What -
 
-What can you do with this package?. 
+What can you do with this package?
 ### Starting beacon and listen to response
 ```dart 
 await _beaconPlugin.startBeacon();  
