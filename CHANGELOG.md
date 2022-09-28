@@ -1,3 +1,6 @@
+## 1.0.0
+* response update for getPeer and addPeer
+* added connectedPair model
 ## 0.0.5
 * operation response and model update
 ## 0.0.4

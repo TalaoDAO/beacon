@@ -6,18 +6,69 @@
 
 [Beacon](https://walletbeacon.io) is an implementation of the wallet interaction standard [tzip-10](https://gitlab.com/tzip/tzip/blob/master/proposals/tzip-10/tzip-10.md) which describes the connection of a dApp with a wallet.
 
-# About
+## About
 
 The `Beacon Flutter Plugin` provides Flutter developers with tools useful for setting up communication between native wallets supporting Tezos and dApps that implement [`beacon-sdk`](https://github.com/airgap-it/beacon-sdk).
 
-# Platform Support
+## Platform Support
 
 | Android | iOS  | MacOS | Web  | Linux | Windows  | 
 |---------|------|-------|------|-------|----------|
 |    ✔️    |   ✔️  |   x   |   x  |   x   |    x     | 
 
-# iOS Setup
+## iOS Setup
 iOS 14 and newer. Reason: Beacon iOS SDK
+
+## Android Setup
+Create a new file `proguard-rules.pro` in android/app/:
+
+```
+  -keep class co.altme.alt.me.altme.** { *; } // Add your id
+  -keep class it.airgap.beaconsdk.** { *; }  
+  -keep class com.sun.jna.** { *; }
+  -keep class * implements com.sun.jna.** { *; }
+
+  # Keep `Companion` object fields of serializable classes.
+  # This avoids serializer lookup through `getDeclaredClasses` as done for named companion objects.
+  -if @kotlinx.serialization.Serializable class **
+  -keepclassmembers class <1> {
+      static <1>$Companion Companion;
+  }
+
+  # Keep `serializer()` on companion objects (both default and named) of serializable classes.
+  -if @kotlinx.serialization.Serializable class ** {
+      static **$* *;
+  }
+  -keepclassmembers class <2>$<3> {
+      kotlinx.serialization.KSerializer serializer(...);
+  }
+
+  # Keep `INSTANCE.serializer()` of serializable objects.
+  -if @kotlinx.serialization.Serializable class ** {
+      public static ** INSTANCE;
+  }
+  -keepclassmembers class <1> {
+      public static <1> INSTANCE;
+      kotlinx.serialization.KSerializer serializer(...);
+  }
+
+  # @Serializable and @Polymorphic are used at runtime for polymorphic serialization.
+  -keepattributes RuntimeVisibleAnnotations,AnnotationDefault
+```
+
+Modify your `build.gradle` in android/app/:
+```
+  buildTypes {
+      release {
+          ...
+          useProguard true
+          proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      }
+      debug {
+          ...
+      }
+  }
+```
 
 ## Example
 ```dart
