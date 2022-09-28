@@ -16,6 +16,33 @@ The `Beacon Flutter Plugin` provides Flutter developers with tools useful for se
 |---------|------|-------|------|-------|----------|
 |    ✔️    |   ✔️  |   x   |   x  |   x   |    x     | 
 
+## Use this package as a library
+
+Depend on it
+
+Run this command:
+
+With Flutter:
+
+```
+$ flutter pub add beacon_flutter
+```
+
+This will add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
+
+```
+dependencies:
+  beacon_flutter: latest
+```
+
+Alternatively, your editor might support `flutter pub get`. Check the docs for your editor to learn more.
+
+Import it
+Now in your Dart code, you can use:
+```
+import 'package:beacon_flutter/beacon_flutter.dart';
+```
+
 ## iOS Setup
 iOS 14 and newer. Reason: Beacon iOS SDK
 
@@ -272,6 +299,15 @@ _beaconPlugin.operationResponse(
   id: beaconRequest!.request!.id!,
   transactionHash: null,
 );
+```
+
+## Get peers lists that is connected with dApp
+```dart 
+final peers = await _beaconPlugin.getPeers();
+final Map<String, dynamic> requestJson =
+    jsonDecode(jsonEncode(peers)) as Map<String, dynamic>;
+final ConnectedPeers connectedPeers =
+    ConnectedPeers.fromJson(requestJson);
 ```
 
 
