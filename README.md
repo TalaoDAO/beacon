@@ -525,10 +525,15 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 ```
+
 # Reference
 
 * [Beacon Android SDK](https://github.com/airgap-it/beacon-android-sdk)
 * [Beacon IOS SDK](https://github.com/airgap-it/beacon-ios-sdk)
+* [Beacon Docs](https://docs.walletbeacon.io/wallet/getting-started/web/getting-started/)
+* [Beacon SDK](https://typedocs.walletbeacon.io/)
+* [tzip-10 Wallet Standard Docs](https://tzip.tezosagora.org/proposal/tzip-10/)
+* [tzip-10 proposals](https://gitlab.com/tezos/tzip/-/tree/master/proposals/tzip-10)
 * [Naan](https://github.com/Tezsure/naan-wallet-1.0)
 * [Autonomy](https://github.com/bitmark-inc/autonomy-client)
 
