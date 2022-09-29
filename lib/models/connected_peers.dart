@@ -7,16 +7,21 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'connected_peers.g.dart';
 
+/// Class for connected dApps
 @JsonSerializable()
 class ConnectedPeers {
+  /// Constructor for creating [ConnectedPeers] object.
   ConnectedPeers({
     this.peer,
   });
 
+  /// Constructor for deserialize json [Map] into [ConnectedPeers] object.
   factory ConnectedPeers.fromJson(Map<String, dynamic> json) =>
       _$ConnectedPeersFromJson(json);
 
+  /// list of peers
   List<P2PPeer>? peer;
 
+  /// Return the serializable of this object into [Map].
   Map<String, dynamic> toJson() => _$ConnectedPeersToJson(this);
 }

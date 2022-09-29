@@ -39,14 +39,13 @@ Request _$RequestFromJson(Map<String, dynamic> json) => Request(
       id: json['id'] as String?,
       origin: json['origin'] == null
           ? null
-          : Destination.fromJson(json['origin'] as Map<String, dynamic>),
+          : Origin.fromJson(json['origin'] as Map<String, dynamic>),
       scopes:
           (json['scopes'] as List<dynamic>?)?.map((e) => e as String).toList(),
       version: json['version'] as String?,
       destination: json['destination'] == null
           ? null
           : Destination.fromJson(json['destination'] as Map<String, dynamic>),
-      senderId: json['senderId'] as String?,
       network: json['network'] == null
           ? null
           : Network.fromJson(json['network'] as Map<String, dynamic>),
@@ -66,7 +65,6 @@ Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
       'scopes': instance.scopes,
       'version': instance.version,
       'destination': instance.destination,
-      'senderId': instance.senderId,
       'network': instance.network,
       'appMetadata': instance.appMetadata,
       'sourceAddress': instance.sourceAddress,
@@ -85,6 +83,16 @@ Map<String, dynamic> _$AppMetadataToJson(AppMetadata instance) =>
     <String, dynamic>{
       'name': instance.name,
       'senderId': instance.senderId,
+    };
+
+Origin _$OriginFromJson(Map<String, dynamic> json) => Origin(
+      kind: json['kind'] as String?,
+      id: json['id'] as String?,
+    );
+
+Map<String, dynamic> _$OriginToJson(Origin instance) => <String, dynamic>{
+      'kind': instance.kind,
+      'id': instance.id,
     };
 
 Destination _$DestinationFromJson(Map<String, dynamic> json) => Destination(
