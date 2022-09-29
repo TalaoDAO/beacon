@@ -14,7 +14,7 @@ The `Beacon Flutter Plugin` provides Flutter developers with tools useful for se
 
 | Android | iOS  | MacOS | Web  | Linux | Windows  | 
 |---------|------|-------|------|-------|----------|
-|    ✔️    |   ✔️  |   x   |   x  |   x   |    x     | 
+|    ✔️    |   ✔️  |       |      |       |          | 
 
 ## Use this package as a library
 
