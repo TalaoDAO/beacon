@@ -23,6 +23,7 @@ import it.airgap.beaconsdk.blockchain.tezos.message.request.BroadcastTezosReques
 import it.airgap.beaconsdk.blockchain.tezos.message.request.OperationTezosRequest
 import it.airgap.beaconsdk.blockchain.tezos.message.request.PermissionTezosRequest
 import it.airgap.beaconsdk.blockchain.tezos.message.request.SignPayloadTezosRequest
+import it.airgap.beaconsdk.blockchain.tezos.message.response.BroadcastTezosResponse
 import it.airgap.beaconsdk.blockchain.tezos.message.response.OperationTezosResponse
 import it.airgap.beaconsdk.blockchain.tezos.message.response.PermissionTezosResponse
 import it.airgap.beaconsdk.blockchain.tezos.message.response.SignPayloadTezosResponse
@@ -325,13 +326,13 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                         SignPayloadTezosResponse.from(request, SigningType.Raw, it)
                     } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
                 }
-                is BroadcastTezosRequest -> ErrorBeaconResponse(
-                    request.id,
-                    request.version,
-                    request.origin,
-                    BeaconError.Unknown,
-                    null
-                )
+                is BroadcastTezosRequest -> {
+                    val transactionHash: String? = call.argument("transactionHash")
+
+                    transactionHash?.let {
+                        BroadcastTezosResponse.from(request, transactionHash)
+                    } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
+                }
                 else -> ErrorBeaconResponse.from(request, BeaconError.Unknown)
             }
             beaconClient?.respond(response)

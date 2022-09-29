@@ -314,8 +314,14 @@ class BeaconConnectService{
                 } else {
                     return operation.decline()
                 }
-            default:
-                return .error(ErrorBeaconResponse(from: blockchainRequest, errorType: .aborted))
+                
+            case let .broadcast(broadcast):
+                let transactionHash: String? = args["transactionHash"] as? String
+                if let transactionHash = transactionHash {
+                    return broadcast.show(transactionHash: transactionHash)
+                } else {
+                    return broadcast.decline()
+                }
             }
         }
     }
@@ -448,6 +454,18 @@ extension OperationTezosRequest {
     func done(transactionHash: String) -> BeaconResponse<Tezos> {
         .blockchain(
             .operation(OperationTezosResponse(from: self, transactionHash: transactionHash))
+        )
+    }
+    
+    func decline() -> BeaconResponse<Tezos> {
+        .error(ErrorBeaconResponse(id: id, version: version, destination: origin, errorType: .aborted))
+    }
+}
+
+extension BroadcastTezosRequest {
+    func show(transactionHash: String) -> BeaconResponse<Tezos> {
+        .blockchain(
+            .broadcast(BroadcastTezosResponse(id: id, version: version, destination: origin, transactionHash: transactionHash))
         )
     }
     

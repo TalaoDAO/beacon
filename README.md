@@ -190,21 +190,19 @@ try {
 
 ### Disconnecting with all dApps
 ```dart 
-Future<void> removePeers() async {
-  try {  
-    ...
-    final Map response = await _beaconPlugin.removePeers());
+try {  
+  ...
+  final Map response = await _beaconPlugin.removePeers());
 
-    final bool success = json.decode(response['success'].toString()) as bool;
+  final bool success = json.decode(response['success'].toString()) as bool;
 
-    if (success) {
-       ...
-    } else {
-      throw ...;
-    }
-  } catch (e) {
-    ...
+  if (success) {
+      ...
+  } else {
+    throw ...;
   }
+} catch (e) {
+  ...
 }
 ```
 
@@ -296,6 +294,37 @@ try {
 ## Reject operation response to dApp
 ```dart 
 _beaconPlugin.operationResponse(
+  id: beaconRequest!.request!.id!,
+  transactionHash: null,
+);
+```
+
+## Sending broadcast response to dApp
+```dart 
+try {  
+  ...
+  // get transactionHash using signedTransaction
+
+  final Map response = await _beaconPlugin.broadcastResponse(
+    id: beaconRequest!.request!.id!,
+    transactionHash: transactionHash,
+  );
+
+  final bool success = json.decode(response['success'].toString()) as bool;
+
+  if (success) {
+      ...
+  } else {
+    throw ...;
+  }
+} catch (e) {
+  ...
+} 
+```
+
+## Reject broadcast response to dApp
+```dart 
+_beaconPlugin.broadcastResponse(
   id: beaconRequest!.request!.id!,
   transactionHash: null,
 );

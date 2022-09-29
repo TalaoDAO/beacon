@@ -57,6 +57,7 @@ Request _$RequestFromJson(Map<String, dynamic> json) => Request(
       senderID: json['senderID'] as String?,
       signingType: json['signingType'] as String?,
       payload: json['payload'] as String?,
+      signedTransaction: json['signedTransaction'] as String?,
     );
 
 Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
@@ -72,6 +73,7 @@ Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
       'senderID': instance.senderID,
       'signingType': instance.signingType,
       'payload': instance.payload,
+      'signedTransaction': instance.signedTransaction,
     };
 
 AppMetadata _$AppMetadataFromJson(Map<String, dynamic> json) => AppMetadata(

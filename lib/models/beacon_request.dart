@@ -49,6 +49,9 @@ class Request {
     this.senderID,
     this.signingType,
     this.payload,
+
+    /// broadcast extra fields
+    this.signedTransaction,
   });
 
   factory Request.fromJson(Map<String, dynamic> json) =>
@@ -69,6 +72,9 @@ class Request {
   String? senderID;
   String? signingType;
   String? payload;
+
+  /// broadcast extra fields
+  String? signedTransaction;
 
   Map<String, dynamic> toJson() => _$RequestToJson(this);
 }

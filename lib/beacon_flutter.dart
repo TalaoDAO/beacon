@@ -92,4 +92,10 @@ class Beacon {
     return await BeaconPlatform.instance
         .operationResponse(id: id, transactionHash: transactionHash);
   }
+
+  Future<Map> broadcastResponse(
+      {required String id, required String? transactionHash}) async {
+    return await BeaconPlatform.instance
+        .broadcastResponse(id: id, transactionHash: transactionHash);
+  }
 }

@@ -133,4 +133,14 @@ class MethodChannelBeacon extends BeaconPlatform {
     Map data = await methodChannel.invokeMethod('tezosResponse', args);
     return data;
   }
+
+  @override
+  Future<Map> broadcastResponse(
+      {required String id, required String? transactionHash}) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent("id", () => id);
+    args.putIfAbsent("transactionHash", () => transactionHash);
+    Map data = await methodChannel.invokeMethod('tezosResponse', args);
+    return data;
+  }
 }

@@ -83,4 +83,9 @@ abstract class BeaconPlatform extends PlatformInterface {
       {required String id, required String? transactionHash}) {
     throw UnimplementedError('operationResponse() has not been implemented.');
   }
+
+  Future<Map> broadcastResponse(
+      {required String id, required String? transactionHash}) {
+    throw UnimplementedError('broadcastResponse() has not been implemented.');
+  }
 }
