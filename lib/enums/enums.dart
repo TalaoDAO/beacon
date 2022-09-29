@@ -1,3 +1,8 @@
+//  Copyright (c) 2022 Altme.
+//  Licensed under Apache License v2.0 that can be
+//  found in the LICENSE file.
+
+/// Request types of tezos responses
 enum RequestType {
   permission,
   signPayload,
@@ -5,6 +10,7 @@ enum RequestType {
   broadcast,
 }
 
+/// Types of operation
 enum OperationKind {
   generic,
   transaction,
@@ -14,6 +20,7 @@ enum OperationKind {
   reveal,
 }
 
+/// Types of networks
 enum NetworkType {
   mainnet,
   ghostnet,

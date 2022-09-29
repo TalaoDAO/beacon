@@ -1,3 +1,7 @@
+//  Copyright (c) 2022 Altme.
+//  Licensed under Apache License v2.0 that can be
+//  found in the LICENSE file.
+
 import 'package:beacon_flutter/enums/enums.dart';
 import 'package:json_annotation/json_annotation.dart';
 
