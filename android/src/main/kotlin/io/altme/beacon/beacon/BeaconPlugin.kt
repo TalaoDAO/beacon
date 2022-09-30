@@ -452,7 +452,7 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
 
             val map: HashMap<String, Any> = HashMap()
             map["success"] = true
-            map["result"] = peers!!
+            map["peer"] = peers!!
 
             val response = Gson().toJson(map)
             result.success(response)
