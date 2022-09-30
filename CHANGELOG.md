@@ -1,3 +1,7 @@
+## 1.0.2
+* android getPeers response update
+* update readme
+
 ## 1.0.1
 * broadcast support
 * update readme

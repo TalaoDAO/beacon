@@ -526,6 +526,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ```
 
+# Author
+
+Beacon Flutter Plugin is developed by [Altme](https://altme.io/). Please feel free to contact us at <thierry@altme.io>.
+
+# Special Thanks
+
+[Tezos Foundation](https://tezos.foundation/)
+
+
+# Package Usage
+
+[Altme](https://github.com/TalaoDAO/AltMe)
+
 # Reference
 
 * [Beacon Android SDK](https://github.com/airgap-it/beacon-android-sdk)
@@ -537,7 +550,6 @@ class _MyHomePageState extends State<MyHomePage> {
 * [Naan](https://github.com/Tezsure/naan-wallet-1.0)
 * [Autonomy](https://github.com/bitmark-inc/autonomy-client)
 
-# Author
+# License
 
-Beacon Flutter Plugin is developed by [Altme](https://altme.io/). Please feel free to contact us at <thierry@altme.io>.
-
+Apache-2.0 (https://pub.dev/packages/beacon_flutter/license)
