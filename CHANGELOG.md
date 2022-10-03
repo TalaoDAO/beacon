@@ -1,3 +1,6 @@
+## 1.0.3
+* add logo of altme and tezos
+
 ## 1.0.2
 * android getPeers response update
 * update readme
