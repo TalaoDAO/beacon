@@ -529,14 +529,14 @@ class _MyHomePageState extends State<MyHomePage> {
 # Author
 
 Beacon Flutter Plugin is developed by [Altme](https://altme.io/). Please feel free to contact us at <thierry@altme.io>.
-<p align="center">
+<p align="left">
   <img src="image/altme.png" width="100" title="Altme"> 
 </p> 
 
 # Special Thanks
 
 [Tezos Foundation](https://tezos.foundation/)
-<p align="center">
+<p align="left">
   <img src="image/tezos.png" width="100" title="Tezos"> 
 </p> 
 
