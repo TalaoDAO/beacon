@@ -1,6 +1,6 @@
 name: beacon_flutter
 description: The Beacon Flutter Plugin provides Flutter developers with tools useful for setting up communication between native wallets supporting Tezos and dApps that implement beacon-sdk.
-version: 1.0.3
+version: 1.0.4
 homepage: https://github.com/TalaoDAO/beacon
 
 environment:
@@ -11,15 +11,15 @@ dependencies:
   base_codecs: ^1.0.1
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.0.2
-  json_annotation: ^4.6.0
+  plugin_platform_interface: ^2.1.3
+  json_annotation: ^4.7.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0 
-  build_runner: ^2.2.0
-  json_serializable: ^6.3.1
+  flutter_lints: ^2.0.1 
+  build_runner: ^2.2.1
+  json_serializable: ^6.4.1
 
 flutter:  
   plugin:

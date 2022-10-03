@@ -96,6 +96,10 @@ buildTypes {
     }
 }
 ```
+
+## Screenshot
+<img src="https://raw.githubusercontent.com/TalaoDAO/beacon/main/image/screenshot-1.png" width=220/> <img src="https://raw.githubusercontent.com/TalaoDAO/beacon/main/image/screenshot-2.png" width=220/>  
+
 ## What -
 
 What can you do with this package?
@@ -529,16 +533,12 @@ class _MyHomePageState extends State<MyHomePage> {
 # Author
 
 Beacon Flutter Plugin is developed by [Altme](https://altme.io/). Please feel free to contact us at <thierry@altme.io>.
-<p align="left">
-  <img src="image/altme.png" width="100" title="Altme"> 
-</p> 
+<img src="https://raw.githubusercontent.com/TalaoDAO/beacon/main/image/altme.png" width=100/>
 
 # Special Thanks
 
 [Tezos Foundation](https://tezos.foundation/)
-<p align="left">
-  <img src="image/tezos.png" width="100" title="Tezos"> 
-</p> 
+<img src="https://raw.githubusercontent.com/TalaoDAO/beacon/main/image/tezos.png" width=100/>
 
 
 # Package Usage
