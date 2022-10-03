@@ -531,7 +531,7 @@ class _MyHomePageState extends State<MyHomePage> {
 Beacon Flutter Plugin is developed by [Altme](https://altme.io/). Please feel free to contact us at <thierry@altme.io>.
 
 <p align="center">
-  <img src="8 image/altme.png" width="350" title="Altme"> 
+  <img src="image/altme.png" width="350" title="Altme"> 
 </p> 
 
 # Special Thanks
@@ -539,7 +539,7 @@ Beacon Flutter Plugin is developed by [Altme](https://altme.io/). Please feel fr
 [Tezos Foundation](https://tezos.foundation/)
 
 <p align="center">
-  <img src="8 image/tezos.png" width="350" title="Tezos"> 
+  <img src="image/tezos.png" width="350" title="Tezos"> 
 </p> 
 
 
