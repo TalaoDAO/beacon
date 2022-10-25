@@ -301,8 +301,26 @@ class BeaconConnectService{
             switch blockchainRequest {
             case let .signPayload(signPayload):
                 let signature: String? = args["signature"] as? String
+                let type: String? = args["type"] as? String
+                
                 if let signature = signature {
-                    return signPayload.accept(signature: signature)
+                    var signingType: Tezos.SigningType = Tezos.SigningType.micheline;
+                    
+                    if(type != nil){
+                        switch type {
+                        case "raw":
+                            signingType = Tezos.SigningType.raw
+                        case "micheline":
+                            signingType = Tezos.SigningType.micheline
+                        case "operation":
+                            signingType = Tezos.SigningType.operation
+                        default:
+                            signingType = Tezos.SigningType.raw
+                        }
+                    } 
+                    print("signingType: \(signingType)")
+                    
+                    return signPayload.accept(signature: signature,signingType : signingType)
                 } else {
                     return signPayload.decline()
                 }
@@ -439,9 +457,9 @@ extension PermissionTezosRequest {
 }
 
 extension SignPayloadTezosRequest {
-    func accept(signature: String) -> BeaconResponse<Tezos> {
+    func accept(signature: String, signingType: Tezos.SigningType) -> BeaconResponse<Tezos> {
         .blockchain(
-            .signPayload(SignPayloadTezosResponse(from: self, signature: signature))
+            .signPayload(SignPayloadTezosResponse(from: self, signingType: signingType, signature: signature))
         )
     }
     

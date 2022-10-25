@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'beacon_platform_interface.dart';
+import 'enums/enums.dart';
 
 /// An implementation of [BeaconPlatform] that uses method channels.
 class MethodChannelBeacon extends BeaconPlatform {
@@ -145,12 +146,17 @@ class MethodChannelBeacon extends BeaconPlatform {
   /// send sign payload response
   /// [id] beacon request id
   /// [signature] signature using payload
+  /// [type] signing type of payload
   @override
-  Future<Map> signPayloadResponse(
-      {required String id, required String? signature}) async {
+  Future<Map> signPayloadResponse({
+    required String id,
+    required String? signature,
+    SigningType type = SigningType.micheline,
+  }) async {
     Map<String, dynamic> args = <String, dynamic>{};
     args.putIfAbsent("id", () => id);
     args.putIfAbsent("signature", () => signature);
+    args.putIfAbsent("type", () => describeEnum(type));
     Map data = await methodChannel.invokeMethod('tezosResponse', args);
     return data;
   }

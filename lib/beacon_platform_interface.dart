@@ -2,6 +2,7 @@
 //  Licensed under Apache License v2.0 that can be
 //  found in the LICENSE file.
 
+import 'package:beacon_flutter/enums/enums.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'beacon_method_channel.dart';
@@ -111,8 +112,12 @@ abstract class BeaconPlatform extends PlatformInterface {
   /// send sign payload response
   /// [id] beacon request id
   /// [signature] signature using payload
-  Future<Map> signPayloadResponse(
-      {required String id, required String? signature}) async {
+  /// [type] signing type of payload
+  Future<Map> signPayloadResponse({
+    required String id,
+    required String? signature,
+    SigningType type = SigningType.micheline,
+  }) async {
     throw UnimplementedError('signPayloadResponse() has not been implemented.');
   }
 

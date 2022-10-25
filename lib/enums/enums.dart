@@ -35,3 +35,9 @@ enum NetworkType {
   kathmandunet,
   custom,
 }
+
+enum SigningType {
+  raw,
+  operation,
+  micheline,
+}

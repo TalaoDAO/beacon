@@ -321,9 +321,25 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                 }
                 is SignPayloadTezosRequest -> {
                     val signature: String? = call.argument("signature")
+                    val type: String? = call.argument("type")
+
+                    var signingType = SigningType.Micheline
+
+                    if(type != null){
+                        signingType = when (type) {
+                            "raw" -> SigningType.Raw
+                            "micheline" -> SigningType.Micheline
+                            "operation" -> SigningType.Operation
+                            else -> {
+                                SigningType.Raw
+                            }
+                        }
+                    }
+
+                    Log.i(tag, signingType.toString())
 
                     signature?.let {
-                        SignPayloadTezosResponse.from(request, SigningType.Raw, it)
+                        SignPayloadTezosResponse.from(request, signingType, it)
                     } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
                 }
                 is BroadcastTezosRequest -> {

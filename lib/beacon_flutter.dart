@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:beacon_flutter/enums/enums.dart';
+
 import 'beacon_platform_interface.dart';
 export 'enums/enums.dart';
 export 'models/models.dart';
@@ -113,10 +115,14 @@ class Beacon {
   /// send sign payload response
   /// [id] beacon request id
   /// [signature] signature using payload
-  Future<Map> signPayloadResponse(
-      {required String id, required String? signature}) async {
+  /// [type] signing type of payload
+  Future<Map> signPayloadResponse({
+    required String id,
+    required String? signature,
+    SigningType type = SigningType.micheline,
+  }) async {
     return await BeaconPlatform.instance
-        .signPayloadResponse(id: id, signature: signature);
+        .signPayloadResponse(id: id, signature: signature, type: type);
   }
 
   /// send operation response
