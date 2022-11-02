@@ -43,6 +43,7 @@ import it.airgap.beaconsdk.transport.p2p.matrix.p2pMatrix
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -251,15 +252,14 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
 
     override fun onCancel(arguments: Any?) {}
 
-
     private var beaconClient: BeaconWalletClient? = null
     private var awaitingRequest: BeaconRequest? = null
-
 
     private var publisher = MutableSharedFlow<BeaconRequest>()
 
     private fun startBeacon(result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
+            beaconClient?.stop()
             beaconClient = BeaconWalletClient("Altme") {
                 support(tezos(), substrate())
                 use(p2pMatrix())
@@ -267,13 +267,14 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                 ignoreUnsupportedBlockchains = true
             }
 
-
             val peers = beaconClient?.getPeers()
             val hasPeer = peers?.isNotEmpty() ?: false
             result.success(mapOf("success" to hasPeer))
-
             launch {
                 beaconClient?.connect()
+                    ?.catch { error ->
+                        Log.e(tag, "connect: ${error.message}")
+                    }
                     ?.onEach { result -> result.getOrNull()?.let { saveAwaitingRequest(it) } }
                     ?.collect { result ->
                         result.getOrNull()?.let {
@@ -436,7 +437,6 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
         }
     }
 
-
     private fun removePeers(result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
             beaconClient?.removeAllPeers()
@@ -445,7 +445,6 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
             result.success(mapOf("success" to !hasPeer))
         }
     }
-
 
     private fun removePeer(publicKey: String, result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -461,7 +460,6 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
         }
     }
 
-
     private fun getPeers(result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
             val peers = beaconClient?.getPeers()
@@ -474,7 +472,6 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
             result.success(response)
         }
     }
-
 
     private fun saveAwaitingRequest(message: BeaconMessage) {
         awaitingRequest = if (message is BeaconRequest) message else null
