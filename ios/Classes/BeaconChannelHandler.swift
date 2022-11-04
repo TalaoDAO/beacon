@@ -132,10 +132,16 @@ class BeaconChannelHandler: NSObject {
     
     
     func tezosResponse(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        BeaconConnectService.shared.tezosResponse(call:call, completion: { _ in
-            result([
-                "success": true
-            ])
+        BeaconConnectService.shared.tezosResponse(call:call, completion: { (data) in
+            if(data.isSuccess){
+                result([
+                    "success": true
+                ])
+            }else{
+                result([
+                    "success": false
+                ])
+            }
         })
     }
     

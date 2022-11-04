@@ -288,9 +288,18 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
 
     private fun tezosResponse(call: MethodCall, result: Result) {
         val id: String? = call.argument("id")
-        val request = awaitingRequest ?: return
 
-        if (request.id != id) return
+        if (awaitingRequest == null) {
+            result.success(mapOf("success" to false, "message" to "INVALID_REQUEST"))
+            return
+        }   
+        
+        val request = awaitingRequest!!
+
+        if (request.id != id) {
+            result.success(mapOf("success" to false, "message" to "INVALID_ID"))
+            return
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             val response = when (request) {

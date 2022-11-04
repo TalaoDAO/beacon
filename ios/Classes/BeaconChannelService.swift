@@ -264,10 +264,23 @@ class BeaconConnectService{
     }
     
     func tezosResponse(call: FlutterMethodCall, completion: @escaping Completion<Void>) {
-        // TODO(bibash): compare request.id with awaitingRequest.id
+        let args: NSDictionary = call.arguments as! NSDictionary
+        let id: String = args["id"] as! String
+        
+        if (awaitingRequest == nil) {
+            completion(.failure(AppError.INVALID_REQUEST))
+            return
+        }
+    
+
         if let request = awaitingRequest {
             awaitingRequest = nil
             do {
+                if (request.id != id) {
+                    completion(.failure(AppError.INVALID_ID))
+                    return
+                }
+                
                 beaconClient?.respond(with: try response(call:call, from: request)) { result in
                     switch result {
                     case .success(_):
@@ -493,3 +506,7 @@ extension BroadcastTezosRequest {
 }
 
  
+enum AppError: String, Error {
+    case INVALID_ID
+    case INVALID_REQUEST
+}

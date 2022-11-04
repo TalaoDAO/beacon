@@ -1,5 +1,6 @@
 ## 1.0.6
 * default wallet name can be added
+
 ## 1.0.5
 * add types of signing type (Micheline, Operation, Raw)
 * disconnect beacon before connection for android
