@@ -50,7 +50,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.annotation:annotation:1.4.0'
     def withoutJna = { exclude group: "net.java.dev.jna" }
-    implementation "com.github.airgap-it:beacon-android-sdk:3.2.2", withoutJna
+    implementation "com.github.airgap-it:beacon-android-sdk:3.2.3-beta02", withoutJna
     implementation "net.java.dev.jna:jna:5.9.0@aar"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
     implementation "com.google.code.gson:gson:2.8.9"
