@@ -1,3 +1,6 @@
+## 1.0.7
+* pairing issue fixed in Android
+
 ## 1.0.6
 * default wallet name can be added
 
