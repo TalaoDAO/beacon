@@ -275,6 +275,7 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                 beaconClient?.connect()
                     ?.catch { error ->
                         Log.e(tag, "connect: ${error.message}")
+                        result.success(mapOf("failure" to error.message))
                     }
                     ?.onEach { result -> result.getOrNull()?.let { saveAwaitingRequest(it) } }
                     ?.collect { result ->

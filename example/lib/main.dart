@@ -53,6 +53,11 @@ class _MyHomePageState extends State<MyHomePage> {
   startBeacon() async {
     final Map response =
         await _beaconPlugin.startBeacon(walletName: "Altme Wallet");
+    if (response['failure'] != null) {
+      final fauilure = json.decode(response['failure'].toString());
+      print('fauilure: $fauilure');
+      return;
+    }
     setState(() {
       hasPeers = json.decode(response['success'].toString());
     });
