@@ -1,3 +1,7 @@
+## 1.0.8
+* android sdk updated to 3.2.3
+* iOS sdk updated to 3.2.3
+
 ## 1.0.7
 * pairing issue fixed in Android
 
