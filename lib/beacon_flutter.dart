@@ -20,19 +20,44 @@ class Beacon {
 
   /// Pair wallet with dApp using [pairingRequest]
   Future<Map> pair({required String pairingRequest}) async {
-    return await BeaconPlatform.instance.pair(pairingRequest: pairingRequest);
+    const totalAttempt = 3;
+    var currentCount = 0;
+    do {
+      try {
+        final Map data =
+            await BeaconPlatform.instance.pair(pairingRequest: pairingRequest);
+        currentCount = totalAttempt;
+        return data;
+      } catch (_) {
+        await Future.delayed(const Duration(seconds: 1));
+        currentCount++;
+      }
+    } while (currentCount < totalAttempt);
+    return {'success': false};
   }
 
   /// Pair wallet with dApp using [P2PPeer] data
   Future<Map> addPeer({required String pairingRequest}) async {
-    Map p2pData = pairingRequestToP2P(pairingRequest: pairingRequest);
-    return await BeaconPlatform.instance.addPeer(
-      id: p2pData['id'],
-      name: p2pData['name'],
-      publicKey: p2pData['publicKey'],
-      relayServer: p2pData['relayServer'],
-      version: p2pData['version'],
-    );
+    const totalAttempt = 3;
+    var currentCount = 0;
+    do {
+      try {
+        Map p2pData = pairingRequestToP2P(pairingRequest: pairingRequest);
+        final Map data = await BeaconPlatform.instance.addPeer(
+          id: p2pData['id'],
+          name: p2pData['name'],
+          publicKey: p2pData['publicKey'],
+          relayServer: p2pData['relayServer'],
+          version: p2pData['version'],
+        );
+        currentCount = totalAttempt;
+        return data;
+      } catch (_) {
+        await Future.delayed(const Duration(seconds: 1));
+        currentCount++;
+      }
+    } while (currentCount < totalAttempt);
+    return {'success': false};
   }
 
   /// remove all peers
