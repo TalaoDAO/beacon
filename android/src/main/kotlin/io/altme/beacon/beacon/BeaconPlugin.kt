@@ -47,6 +47,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import java.util.ArrayList
 import java.util.HashMap
 
@@ -259,165 +260,181 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     private var publisher = MutableSharedFlow<BeaconRequest>()
 
     private fun startBeacon(walletName: String, result: Result) {
-        CoroutineScope(Dispatchers.IO).launch {
-            beaconClient?.stop()
-            beaconClient = BeaconWalletClient(walletName) {
-                support(tezos(), substrate())
-                use(p2pMatrix())
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                beaconClient?.stop()
+                beaconClient = BeaconWalletClient(walletName) {
+                    support(tezos(), substrate())
+                    use(p2pMatrix())
 
-                ignoreUnsupportedBlockchains = true
-            }
+                    ignoreUnsupportedBlockchains = true
+                }
 
-            val peers = beaconClient?.getPeers()
-            val hasPeer = peers?.isNotEmpty() ?: false
-            result.success(mapOf("success" to hasPeer))
-            launch {
-                beaconClient?.connect()
-                    ?.catch { error ->
-                        Log.e(tag, "connect: ${error.message}")
-                    }
-                    ?.onEach { result -> result.getOrNull()?.let { saveAwaitingRequest(it) } }
-                    ?.collect { result ->
-                        result.getOrNull()?.let {
-                            publisher.emit(it)
+                val peers = beaconClient?.getPeers()
+                val hasPeer = peers?.isNotEmpty() ?: false
+                result.success(mapOf("success" to hasPeer))
+                launch {
+                    beaconClient?.connect()
+                        ?.catch { error ->
+                            Log.e(tag, "connect: ${error.message}")
                         }
-                    }
+                        ?.onEach { result -> result.getOrNull()?.let { saveAwaitingRequest(it) } }
+                        ?.collect { result ->
+                            result.getOrNull()?.let {
+                                publisher.emit(it)
+                            }
+                        }
+                }
             }
+        } catch (e: Exception) {
+            result.success(mapOf("message" to e.toString(), "success" to false))
         }
     }
 
     private fun tezosResponse(call: MethodCall, result: Result) {
-        val id: String? = call.argument("id")
+        try {
+            val id: String? = call.argument("id")
 
-        if (awaitingRequest == null) {
-            result.success(mapOf("success" to false, "message" to "INVALID_REQUEST"))
-            return
-        }   
-        
-        val request = awaitingRequest!!
+            if (awaitingRequest == null) {
+                result.success(mapOf("success" to false, "message" to "INVALID_REQUEST"))
+                return
+            }
 
-        if (request.id != id) {
-            result.success(mapOf("success" to false, "message" to "INVALID_ID"))
-            return
-        }
+            val request = awaitingRequest!!
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = when (request) {
-                is PermissionTezosRequest -> {
-                    val publicKey: String? = call.argument("publicKey")
-                    val address: String? = call.argument("address")
+            if (request.id != id) {
+                result.success(mapOf("success" to false, "message" to "INVALID_ID"))
+                return
+            }
 
-                    publicKey?.let {
-                        PermissionTezosResponse.from(
-                            request,
-                            TezosAccount(
-                                it,
-                                address!!,
-                                request.network,
-                                beaconClient!!
-                            ),
-                            listOf(
-                                TezosPermission.Scope.Sign,
-                                TezosPermission.Scope.OperationRequest
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = when (request) {
+                    is PermissionTezosRequest -> {
+                        val publicKey: String? = call.argument("publicKey")
+                        val address: String? = call.argument("address")
+
+                        publicKey?.let {
+                            PermissionTezosResponse.from(
+                                request,
+                                TezosAccount(
+                                    it,
+                                    address!!,
+                                    request.network,
+                                    beaconClient!!
+                                ),
+                                listOf(
+                                    TezosPermission.Scope.Sign,
+                                    TezosPermission.Scope.OperationRequest
+                                )
                             )
-                        )
-                    } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
-                }
-                is OperationTezosRequest -> {
-                    val transactionHash: String? = call.argument("transactionHash")
+                        } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
+                    }
+                    is OperationTezosRequest -> {
+                        val transactionHash: String? = call.argument("transactionHash")
 
-                    transactionHash?.let {
-                        OperationTezosResponse.from(request, transactionHash)
-                    } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
-                }
-                is SignPayloadTezosRequest -> {
-                    val signature: String? = call.argument("signature")
-                    val type: String? = call.argument("type")
+                        transactionHash?.let {
+                            OperationTezosResponse.from(request, transactionHash)
+                        } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
+                    }
+                    is SignPayloadTezosRequest -> {
+                        val signature: String? = call.argument("signature")
+                        val type: String? = call.argument("type")
 
-                    var signingType = SigningType.Micheline
+                        var signingType = SigningType.Micheline
 
-                    if(type != null){
-                        signingType = when (type) {
-                            "raw" -> SigningType.Raw
-                            "micheline" -> SigningType.Micheline
-                            "operation" -> SigningType.Operation
-                            else -> {
-                                SigningType.Raw
+                        if(type != null){
+                            signingType = when (type) {
+                                "raw" -> SigningType.Raw
+                                "micheline" -> SigningType.Micheline
+                                "operation" -> SigningType.Operation
+                                else -> {
+                                    SigningType.Raw
+                                }
                             }
                         }
+
+                        Log.i(tag, signingType.toString())
+
+                        signature?.let {
+                            SignPayloadTezosResponse.from(request, signingType, it)
+                        } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
                     }
+                    is BroadcastTezosRequest -> {
+                        val transactionHash: String? = call.argument("transactionHash")
 
-                    Log.i(tag, signingType.toString())
-
-                    signature?.let {
-                        SignPayloadTezosResponse.from(request, signingType, it)
-                    } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
+                        transactionHash?.let {
+                            BroadcastTezosResponse.from(request, transactionHash)
+                        } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
+                    }
+                    else -> ErrorBeaconResponse.from(request, BeaconError.Unknown)
                 }
-                is BroadcastTezosRequest -> {
-                    val transactionHash: String? = call.argument("transactionHash")
-
-                    transactionHash?.let {
-                        BroadcastTezosResponse.from(request, transactionHash)
-                    } ?: ErrorBeaconResponse.from(request, BeaconError.Aborted)
-                }
-                else -> ErrorBeaconResponse.from(request, BeaconError.Unknown)
+                beaconClient?.respond(response)
+                removeAwaitingRequest()
+                result.success(mapOf("success" to true))
             }
-            beaconClient?.respond(response)
-            removeAwaitingRequest()
-            result.success(mapOf("success" to true))
+        } catch (e: Exception) {
+            result.success(mapOf("message" to e.toString(), "success" to false))
         }
     }
 
     private fun respondExample(result: Result) {
-        val request = awaitingRequest ?: return
-        val beaconClient = beaconClient ?: return
+        try {
+            val request = awaitingRequest ?: return
+            val beaconClient = beaconClient ?: return
 
-        Log.i(tag, request.toString())
+            Log.i(tag, request.toString())
 
-        CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.IO).launch {
 
-            val peers = beaconClient.getPeers()
-            if (peers.isEmpty()) return@launch
+                val peers = beaconClient.getPeers()
+                if (peers.isEmpty()) return@launch
 
-            val response = when (request) {
-                /* Tezos */
+                val response = when (request) {
+                    /* Tezos */
 
-                is PermissionTezosRequest -> PermissionTezosResponse.from(
-                    request,
-                    exampleTezosAccount(request.network, beaconClient)
-                )
-                is OperationTezosRequest -> ErrorBeaconResponse.from(request, BeaconError.Aborted)
-                is SignPayloadTezosRequest -> ErrorBeaconResponse.from(
-                    request,
-                    TezosError.SignatureTypeNotSupported
-                )
-                is BroadcastTezosRequest -> ErrorBeaconResponse.from(
-                    request,
-                    TezosError.BroadcastError
-                )
+                    is PermissionTezosRequest -> PermissionTezosResponse.from(
+                        request,
+                        exampleTezosAccount(request.network, beaconClient)
+                    )
+                    is OperationTezosRequest -> ErrorBeaconResponse.from(request, BeaconError.Aborted)
+                    is SignPayloadTezosRequest -> ErrorBeaconResponse.from(
+                        request,
+                        TezosError.SignatureTypeNotSupported
+                    )
+                    is BroadcastTezosRequest -> ErrorBeaconResponse.from(
+                        request,
+                        TezosError.BroadcastError
+                    )
 
-                /* Substrate*/
+                    /* Substrate*/
 
-                is PermissionSubstrateRequest -> PermissionSubstrateResponse.from(
-                    request,
-                    listOf(exampleSubstrateAccount(request.networks.first(), beaconClient))
-                )
+                    is PermissionSubstrateRequest -> PermissionSubstrateResponse.from(
+                        request,
+                        listOf(exampleSubstrateAccount(request.networks.first(), beaconClient))
+                    )
 
-                /* Others */
-                else -> ErrorBeaconResponse.from(request, BeaconError.Unknown)
+                    /* Others */
+                    else -> ErrorBeaconResponse.from(request, BeaconError.Unknown)
+                }
+                beaconClient.respond(response)
+                removeAwaitingRequest()
+                result.success(mapOf("success" to true))
             }
-            beaconClient.respond(response)
-            removeAwaitingRequest()
-            result.success(mapOf("success" to true))
+        } catch (e: Exception) {
+            result.success(mapOf("message" to e.toString(), "success" to false))
         }
     }
 
     private fun pair(pairingRequest: String, result: Result) {
-        CoroutineScope(Dispatchers.IO).launch {
-            beaconClient?.pair(pairingRequest)
-            val peers = beaconClient?.getPeers()
-            val hasPeer = peers?.isNotEmpty() ?: false
-            result.success(mapOf("success" to hasPeer))
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                beaconClient?.pair(pairingRequest)
+                val peers = beaconClient?.getPeers()
+                val hasPeer = peers?.isNotEmpty() ?: false
+                result.success(mapOf("success" to hasPeer))
+            }
+        } catch (e: Exception) {
+            result.success(mapOf("message" to e.toString(), "success" to false))
         }
     }
 
@@ -429,57 +446,73 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
         version: String,
         result: Result
     ) {
-        val peer = P2pPeer(
-            id = id,
-            name = name,
-            publicKey = publicKey,
-            relayServer = relayServer,
-            version = version,
-        )
-        CoroutineScope(Dispatchers.IO).launch {
-            beaconClient?.addPeers(peer)
+        try {
+            val peer = P2pPeer(
+                id = id,
+                name = name,
+                publicKey = publicKey,
+                relayServer = relayServer,
+                version = version,
+            )
+            CoroutineScope(Dispatchers.IO).launch {
+                beaconClient?.addPeers(peer)
 
-            val map: HashMap<String, Any> = HashMap()
-            map["success"] = true
-            map["result"] = peer
+                val map: HashMap<String, Any> = HashMap()
+                map["success"] = true
+                map["result"] = peer
 
-            result.success(Gson().toJson(map))
+                result.success(Gson().toJson(map))
+            }
+        } catch (e: Exception) {
+            result.success(mapOf("message" to e.toString(), "success" to false))
         }
     }
 
     private fun removePeers(result: Result) {
-        CoroutineScope(Dispatchers.IO).launch {
-            beaconClient?.removeAllPeers()
-            val peers = beaconClient?.getPeers()
-            val hasPeer = peers?.isNotEmpty() ?: false
-            result.success(mapOf("success" to !hasPeer))
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                beaconClient?.removeAllPeers()
+                val peers = beaconClient?.getPeers()
+                val hasPeer = peers?.isNotEmpty() ?: false
+                result.success(mapOf("success" to !hasPeer))
+            }
+        } catch (e: Exception) {
+            result.success(mapOf("message" to e.toString(), "success" to false))
         }
     }
 
     private fun removePeer(publicKey: String, result: Result) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val peers = beaconClient?.getPeers()
-            val hasPeer = peers?.isNotEmpty() ?: false
-            if (hasPeer) {
-                val peer: List<Peer> = peers!!.filter { it.publicKey == publicKey }
-                beaconClient?.removePeers(peer)
-                result.success(mapOf("success" to true))
-            } else {
-                result.success(mapOf("success" to false))
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                val peers = beaconClient?.getPeers()
+                val hasPeer = peers?.isNotEmpty() ?: false
+                if (hasPeer) {
+                    val peer: List<Peer> = peers!!.filter { it.publicKey == publicKey }
+                    beaconClient?.removePeers(peer)
+                    result.success(mapOf("success" to true))
+                } else {
+                    result.success(mapOf("success" to false))
+                }
             }
+        } catch (e: Exception) {
+            result.success(mapOf("message" to e.toString(), "success" to false))
         }
     }
 
     private fun getPeers(result: Result) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val peers = beaconClient?.getPeers()
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                val peers = beaconClient?.getPeers()
 
-            val map: HashMap<String, Any> = HashMap()
-            map["success"] = true
-            map["peer"] = peers!!
+                val map: HashMap<String, Any> = HashMap()
+                map["success"] = true
+                map["peer"] = peers!!
 
-            val response = Gson().toJson(map)
-            result.success(response)
+                val response = Gson().toJson(map)
+                result.success(response)
+            }
+        } catch (e: Exception) {
+            result.success(mapOf("message" to e.toString(), "success" to false))
         }
     }
 
