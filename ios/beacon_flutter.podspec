@@ -15,12 +15,12 @@ A new Flutter beacon plugin.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'BeaconCore', '3.2.3'
-  s.dependency 'BeaconClientDApp', '3.2.3'
-  s.dependency 'BeaconClientWallet', '3.2.3'
-  s.dependency 'BeaconBlockchainSubstrate', '3.2.3'
-  s.dependency 'BeaconBlockchainTezos', '3.2.3'
-  s.dependency 'BeaconTransportP2PMatrix', '3.2.3'
+  s.dependency 'BeaconCore', '3.2.4'
+  s.dependency 'BeaconClientDApp', '3.2.4'
+  s.dependency 'BeaconClientWallet', '3.2.4'
+  s.dependency 'BeaconBlockchainSubstrate', '3.2.4'
+  s.dependency 'BeaconBlockchainTezos', '3.2.4'
+  s.dependency 'BeaconTransportP2PMatrix', '3.2.4'
   s.platform = :ios, '14.0'
 
   # Flutter.framework does not contain a i386 slice.
