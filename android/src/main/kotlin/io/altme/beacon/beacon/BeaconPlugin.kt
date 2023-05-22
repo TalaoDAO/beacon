@@ -260,8 +260,8 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     private var publisher = MutableSharedFlow<BeaconRequest>()
 
     private fun startBeacon(walletName: String, result: Result) {
-        try {
-            CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
                 beaconClient?.stop()
                 beaconClient = BeaconWalletClient(walletName) {
                     support(tezos(), substrate())
@@ -285,9 +285,9 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
                             }
                         }
                 }
+            } catch (e: Exception) {
+                result.success(mapOf("message" to e.toString(), "success" to false))
             }
-        } catch (e: Exception) {
-            result.success(mapOf("message" to e.toString(), "success" to false))
         }
     }
 
