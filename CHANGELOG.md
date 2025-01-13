@@ -1,3 +1,7 @@
+## 1.1.0
+
+- update packages
+
 ## 1.0.9
 
 - add support for Limanet and Mumbainet
