@@ -21,7 +21,7 @@ A new Flutter beacon plugin.
   s.dependency 'BeaconBlockchainSubstrate', '4.0.0'
   s.dependency 'BeaconBlockchainTezos', '4.0.0'
   s.dependency 'BeaconTransportP2PMatrix', '4.0.0'
-  s.platform = :ios, '14.0'
+  s.platform = :ios, '16.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
