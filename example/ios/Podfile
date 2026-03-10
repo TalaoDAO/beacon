@@ -31,13 +31,13 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # Use Git sources for Beacon SDK v4.0.0 (not available on CocoaPods trunk)
-  pod 'BeaconCore', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.0'
-  pod 'BeaconClientDApp', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.0'
-  pod 'BeaconClientWallet', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.0'
-  pod 'BeaconBlockchainSubstrate', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.0'
-  pod 'BeaconBlockchainTezos', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.0'
-  pod 'BeaconTransportP2PMatrix', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.0'
+  # Use Git sources for Beacon SDK v4.0.1 (not available on CocoaPods trunk)
+  pod 'BeaconCore', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconClientDApp', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconClientWallet', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconBlockchainSubstrate', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconBlockchainTezos', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.1'
+  pod 'BeaconTransportP2PMatrix', :git => 'https://github.com/airgap-it/beacon-ios-sdk.git', :tag => '4.0.1'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
