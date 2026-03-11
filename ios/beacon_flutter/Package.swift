@@ -27,7 +27,6 @@ let package = Package(
             name: "beacon_flutter",
             dependencies: [
                 .product(name: "FlutterFramework", package: "FlutterFramework"),
-                .product(name: "Beacon", package: "beacon-ios-sdk")
             ],
             resources: [
                 // TODO: If your plugin requires a privacy manifest

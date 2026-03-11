@@ -14,6 +14,7 @@ A new Flutter beacon plugin.
   s.author           = { 'Altme' => 'bibashshrestha@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'beacon_flutter/Sources/beacon_flutter/**/*.swift'
+  s.dependency 'Flutter'
   s.dependency 'BeaconCore', '4.0.0'
   s.dependency 'BeaconClientDApp', '4.0.0'
   s.dependency 'BeaconClientWallet', '4.0.0'
