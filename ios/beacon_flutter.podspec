@@ -13,12 +13,11 @@ A new Flutter beacon plugin.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Altme' => 'bibashshrestha@gmail.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
-  s.dependency 'Flutter'
+  s.source_files = 'beacon_flutter/Sources/beacon_flutter/**/*.swift'
   s.dependency 'BeaconCore', '4.0.0'
   s.dependency 'BeaconClientDApp', '4.0.0'
   s.dependency 'BeaconClientWallet', '4.0.0'
-  s.dependency 'BeaconBlockchainSubstrate', '3.2.4'
+  s.dependency 'BeaconBlockchainSubstrate', '4.0.0'
   s.dependency 'BeaconBlockchainTezos', '4.0.0'
   s.dependency 'BeaconTransportP2PMatrix', '4.0.0'
   s.platform = :ios, '15.5'

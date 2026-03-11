@@ -4,8 +4,8 @@ version: 2.0.2
 homepage: https://github.com/TalaoDAO/beacon
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=2.5.0"
+  sdk: ^3.11.0
+  flutter: ">=3.41.0"
 
 dependencies:
   base_codecs: ^1.0.1
