@@ -18,7 +18,7 @@ A new Flutter beacon plugin.
   s.dependency 'BeaconCore', '4.0.0'
   s.dependency 'BeaconClientDApp', '4.0.0'
   s.dependency 'BeaconClientWallet', '4.0.0'
-  s.dependency 'BeaconBlockchainSubstrate', '4.0.0'
+  s.dependency 'BeaconBlockchainSubstrate', '3.2.4'
   s.dependency 'BeaconBlockchainTezos', '4.0.0'
   s.dependency 'BeaconTransportP2PMatrix', '4.0.0'
   s.platform = :ios, '15.5'
