@@ -98,6 +98,7 @@ unlinked_spec.ds
 **/ios/Runner/GeneratedPluginRegistrant.*
 **/ios/Runner.app.dSYM.zip
 **/ios/Runner.ipa
+swiftpm/
 
 # Coverage
 coverage/
