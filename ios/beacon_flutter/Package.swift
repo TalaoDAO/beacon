@@ -19,7 +19,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
-        .package(url: "https://github.com/TalaoDAO/beacon-ios-sdk", from: "4.0.1")
+        .package(url: "https://github.com/TalaoDAO/beacon-ios-sdk", from: "4.0.2")
     ],
     targets: [
         .target(
