@@ -1,7 +1,7 @@
 ## 2.0.1
 
 - update android packages to 4.0.1
-- update ios packages to 4.0.1
+- update ios packages to 4.0.0
 
 ## 2.0.0
 
