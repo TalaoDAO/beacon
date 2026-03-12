@@ -32,7 +32,9 @@ let package = Package(
                 .product(name: "BeaconClientWallet", package: "beacon-ios-sdk"),
                 .product(name: "BeaconTransportP2PMatrix", package: "beacon-ios-sdk"),
                 .product(name: "BeaconCore", package: "beacon-ios-sdk"),
-                .product(name: "BeaconBlockchainSubstrate", package: "beacon-ios-sdk")
+                .product(name: "BeaconBlockchainSubstrate", package: "beacon-ios-sdk"),
+                .product(name: "Base58Swift", package: "Base58Swift")
+
             ],
             resources: [
                 // TODO: If your plugin requires a privacy manifest

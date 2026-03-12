@@ -21,6 +21,7 @@ A new Flutter beacon plugin.
   s.dependency 'BeaconBlockchainSubstrate', '4.0.0'
   s.dependency 'BeaconBlockchainTezos', '4.0.0'
   s.dependency 'BeaconTransportP2PMatrix', '4.0.0'
+  s.dependency 'Base58Swift', '~> 2.1.0'
   s.platform = :ios, '15.5'
 
   # Flutter.framework does not contain a i386 slice.
