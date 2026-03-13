@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'beacon_flutter'
-  s.version          = '2.0.0'
+  s.version          = '2.0.3'
   s.summary          = 'The Beacon Flutter Plugin provides Flutter developers with tools useful for setting up communication between native wallets supporting Tezos and dApps that implement beacon-sdk.'
   s.description      = <<-DESC
 A new Flutter beacon plugin.
@@ -15,12 +15,12 @@ A new Flutter beacon plugin.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'BeaconCore', '3.2.4'
-  s.dependency 'BeaconClientDApp', '3.2.4'
-  s.dependency 'BeaconClientWallet', '3.2.4'
-  s.dependency 'BeaconBlockchainSubstrate', '3.2.4'
-  s.dependency 'BeaconBlockchainTezos', '3.2.4'
-  s.dependency 'BeaconTransportP2PMatrix', '3.2.4'
+  s.dependency 'BeaconCore', '4.0.0'
+  s.dependency 'BeaconClientDApp', '4.0.0'
+  s.dependency 'BeaconClientWallet', '4.0.0'
+  s.dependency 'BeaconBlockchainSubstrate', '4.0.0'
+  s.dependency 'BeaconBlockchainTezos', '4.0.0'
+  s.dependency 'BeaconTransportP2PMatrix', '4.0.0'
   s.platform = :ios, '14.0'
 
   # Flutter.framework does not contain a i386 slice.

@@ -30,6 +30,21 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
+  pod 'BeaconCore', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
+    
+  // optional
+  pod 'BeaconClientDApp', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
+
+  // optional
+  pod 'BeaconClientWallet', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
+
+  // optional
+  pod 'BeaconBlockchainSubstrate', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
+  // optional
+  pod 'BeaconBlockchainTezos', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
+
+  // optional
+  pod 'BeaconTransportP2PMatrix', :git => 'https://github.com/airgap-it/beacon-ios-sdk', :tag => '4.0.0'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
