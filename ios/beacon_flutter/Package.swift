@@ -19,7 +19,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
-        .package(url: "https://github.com/TalaoDAO/beacon-ios-sdk", from: "4.0.2"),
+        .package(url: "https://github.com/TalaoDAO/beacon-ios-sdk", from: "4.0.1"),
         .package(url: "https://github.com/keefertaylor/Base58Swift", from: "2.1.0")
     ],
     targets: [
@@ -33,6 +33,7 @@ let package = Package(
                 .product(name: "BeaconTransportP2PMatrix", package: "beacon-ios-sdk"),
                 .product(name: "BeaconCore", package: "beacon-ios-sdk"),
                 .product(name: "BeaconBlockchainSubstrate", package: "beacon-ios-sdk"),
+                .product(name: "Base58", package: "Base58"),
                 .product(name: "Base58Swift", package: "Base58Swift")
 
             ],
