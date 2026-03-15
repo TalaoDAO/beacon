@@ -33,7 +33,6 @@ let package = Package(
                 .product(name: "BeaconTransportP2PMatrix", package: "beacon-ios-sdk"),
                 .product(name: "BeaconCore", package: "beacon-ios-sdk"),
                 .product(name: "BeaconBlockchainSubstrate", package: "beacon-ios-sdk"),
-                .product(name: "Base58", package: "Base58"),
                 .product(name: "Base58Swift", package: "Base58Swift")
 
             ],
