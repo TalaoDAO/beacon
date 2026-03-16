@@ -126,7 +126,6 @@ class BeaconConnectService{
         version: String ) -> AnyPublisher<Beacon.P2PPeer, Error> {
             return  Future<Beacon.P2PPeer, Error> { [self] (promise) in
                 let peer = Beacon.P2PPeer(
-                    id : id,
                     name :name,
                     publicKey : publicKey,
                     relayServer : relayServer,

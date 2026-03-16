@@ -448,7 +448,6 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
     ) {
         try {
             val peer = P2pPeer(
-                id = id,
                 name = name,
                 publicKey = publicKey,
                 relayServer = relayServer,
