@@ -28,4 +28,4 @@ flutter:
         package: io.altme.beacon.beacon
         pluginClass: BeaconPlugin
       ios:
-        pluginClass: BeaconPlugin
+        pluginClass: SwiftBeaconPlugin
