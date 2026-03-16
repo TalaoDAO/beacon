@@ -6,6 +6,8 @@ import BeaconTransportP2PMatrix
 import BeaconCore
 import Base58Swift
 import BeaconBlockchainSubstrate
+import Flutter
+
 
 typealias Completion<T> = (Result<T, Error>) -> Void
 
