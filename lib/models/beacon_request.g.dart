@@ -36,85 +36,74 @@ const _$RequestTypeEnumMap = {
 };
 
 Request _$RequestFromJson(Map<String, dynamic> json) => Request(
-      id: json['id'] as String?,
-      origin: json['origin'] == null
-          ? null
-          : Origin.fromJson(json['origin'] as Map<String, dynamic>),
-      scopes:
-          (json['scopes'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      version: json['version'] as String?,
-      destination: json['destination'] == null
-          ? null
-          : Destination.fromJson(json['destination'] as Map<String, dynamic>),
-      network: json['network'] == null
-          ? null
-          : Network.fromJson(json['network'] as Map<String, dynamic>),
-      appMetadata: json['appMetadata'] == null
-          ? null
-          : AppMetadata.fromJson(json['appMetadata'] as Map<String, dynamic>),
-      sourceAddress: json['sourceAddress'] as String?,
-      senderID: json['senderID'] as String?,
-      signingType: json['signingType'] as String?,
-      payload: json['payload'] as String?,
-      signedTransaction: json['signedTransaction'] as String?,
-    );
+  id: json['id'] as String?,
+  origin: json['origin'] == null
+      ? null
+      : Origin.fromJson(json['origin'] as Map<String, dynamic>),
+  scopes: (json['scopes'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  version: json['version'] as String?,
+  destination: json['destination'] == null
+      ? null
+      : Destination.fromJson(json['destination'] as Map<String, dynamic>),
+  network: json['network'] == null
+      ? null
+      : Network.fromJson(json['network'] as Map<String, dynamic>),
+  appMetadata: json['appMetadata'] == null
+      ? null
+      : AppMetadata.fromJson(json['appMetadata'] as Map<String, dynamic>),
+  sourceAddress: json['sourceAddress'] as String?,
+  senderID: json['senderID'] as String?,
+  signingType: json['signingType'] as String?,
+  payload: json['payload'] as String?,
+  signedTransaction: json['signedTransaction'] as String?,
+);
 
 Map<String, dynamic> _$RequestToJson(Request instance) => <String, dynamic>{
-      'id': instance.id,
-      'origin': instance.origin,
-      'scopes': instance.scopes,
-      'version': instance.version,
-      'destination': instance.destination,
-      'network': instance.network,
-      'appMetadata': instance.appMetadata,
-      'sourceAddress': instance.sourceAddress,
-      'senderID': instance.senderID,
-      'signingType': instance.signingType,
-      'payload': instance.payload,
-      'signedTransaction': instance.signedTransaction,
-    };
+  'id': instance.id,
+  'origin': instance.origin,
+  'scopes': instance.scopes,
+  'version': instance.version,
+  'destination': instance.destination,
+  'network': instance.network,
+  'appMetadata': instance.appMetadata,
+  'sourceAddress': instance.sourceAddress,
+  'senderID': instance.senderID,
+  'signingType': instance.signingType,
+  'payload': instance.payload,
+  'signedTransaction': instance.signedTransaction,
+};
 
 AppMetadata _$AppMetadataFromJson(Map<String, dynamic> json) => AppMetadata(
-      name: json['name'] as String?,
-      senderId: json['senderId'] as String?,
-    );
+  name: json['name'] as String?,
+  senderId: json['senderId'] as String?,
+);
 
 Map<String, dynamic> _$AppMetadataToJson(AppMetadata instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'senderId': instance.senderId,
-    };
+    <String, dynamic>{'name': instance.name, 'senderId': instance.senderId};
 
-Origin _$OriginFromJson(Map<String, dynamic> json) => Origin(
-      kind: json['kind'] as String?,
-      id: json['id'] as String?,
-    );
+Origin _$OriginFromJson(Map<String, dynamic> json) =>
+    Origin(kind: json['kind'] as String?, id: json['id'] as String?);
 
 Map<String, dynamic> _$OriginToJson(Origin instance) => <String, dynamic>{
-      'kind': instance.kind,
-      'id': instance.id,
-    };
+  'kind': instance.kind,
+  'id': instance.id,
+};
 
-Destination _$DestinationFromJson(Map<String, dynamic> json) => Destination(
-      kind: json['kind'] as String?,
-      id: json['id'] as String?,
-    );
+Destination _$DestinationFromJson(Map<String, dynamic> json) =>
+    Destination(kind: json['kind'] as String?, id: json['id'] as String?);
 
 Map<String, dynamic> _$DestinationToJson(Destination instance) =>
-    <String, dynamic>{
-      'kind': instance.kind,
-      'id': instance.id,
-    };
+    <String, dynamic>{'kind': instance.kind, 'id': instance.id};
 
 Network _$NetworkFromJson(Map<String, dynamic> json) => Network(
-      type: $enumDecodeNullable(_$NetworkTypeEnumMap, json['type']),
-      rpcUrl: json['rpcUrl'] as String?,
-    );
+  type: $enumDecodeNullable(_$NetworkTypeEnumMap, json['type']),
+  rpcUrl: json['rpcUrl'] as String?,
+);
 
 Map<String, dynamic> _$NetworkToJson(Network instance) => <String, dynamic>{
-      'type': _$NetworkTypeEnumMap[instance.type],
-      'rpcUrl': instance.rpcUrl,
-    };
+  'type': _$NetworkTypeEnumMap[instance.type],
+  'rpcUrl': instance.rpcUrl,
+};
 
 const _$NetworkTypeEnumMap = {
   NetworkType.mainnet: 'mainnet',

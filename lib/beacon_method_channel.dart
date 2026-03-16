@@ -41,14 +41,12 @@ class MethodChannelBeacon extends BeaconPlatform {
   /// Pair wallet with dApp using [P2PPeer] data
   @override
   Future<Map> addPeer({
-    required String id,
     required String name,
     required String publicKey,
     required String relayServer,
     required String version,
   }) async {
     Map<String, dynamic> args = <String, dynamic>{};
-    args.putIfAbsent("id", () => id);
     args.putIfAbsent("name", () => name);
     args.putIfAbsent("publicKey", () => publicKey);
     args.putIfAbsent("relayServer", () => relayServer);
@@ -158,7 +156,7 @@ class MethodChannelBeacon extends BeaconPlatform {
     Map<String, dynamic> args = <String, dynamic>{};
     args.putIfAbsent("id", () => id);
     args.putIfAbsent("signature", () => signature);
-    args.putIfAbsent("type", () => describeEnum(type));
+    args.putIfAbsent("type", () => type.name);
     Map data = await methodChannel.invokeMethod('tezosResponse', args);
     return data;
   }

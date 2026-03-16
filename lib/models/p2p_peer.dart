@@ -11,7 +11,6 @@ part 'p2p_peer.g.dart';
 class P2PPeer {
   /// Constructor for creating [P2PPeer] object.
   P2PPeer({
-    required this.id,
     required this.name,
     required this.publicKey,
     required this.relayServer,
@@ -24,9 +23,6 @@ class P2PPeer {
   /// Constructor for deserialize json [Map] into [P2PPeer] object.
   factory P2PPeer.fromJson(Map<String, dynamic> json) =>
       _$P2PPeerFromJson(json);
-
-  /// dApp id
-  final String id;
 
   /// dApp name
   final String name;

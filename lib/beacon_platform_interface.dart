@@ -41,7 +41,6 @@ abstract class BeaconPlatform extends PlatformInterface {
 
   /// Pair wallet with dApp using [P2PPeer] data
   Future<Map> addPeer({
-    required String id,
     required String name,
     required String publicKey,
     required String relayServer,

@@ -14,6 +14,4 @@ ConnectedPeers _$ConnectedPeersFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$ConnectedPeersToJson(ConnectedPeers instance) =>
-    <String, dynamic>{
-      'peer': instance.peer,
-    };
+    <String, dynamic>{'peer': instance.peer};

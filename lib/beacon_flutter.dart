@@ -44,7 +44,6 @@ class Beacon {
       try {
         Map p2pData = pairingRequestToP2P(pairingRequest: pairingRequest);
         final Map data = await BeaconPlatform.instance.addPeer(
-          id: p2pData['id'],
           name: p2pData['name'],
           publicKey: p2pData['publicKey'],
           relayServer: p2pData['relayServer'],
