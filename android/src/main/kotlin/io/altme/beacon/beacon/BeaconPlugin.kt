@@ -394,7 +394,8 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
 
                     is PermissionTezosRequest -> PermissionTezosResponse.from(
                         request,
-                        exampleTezosAccount(request.network, beaconClient)
+                        exampleTezosAccount(request.network, beaconClient),
+                        beaconClient,
                     )
                     is OperationTezosRequest -> ErrorBeaconResponse.from(request, BeaconError.Aborted)
                     is SignPayloadTezosRequest -> ErrorBeaconResponse.from(
@@ -410,7 +411,8 @@ class BeaconPlugin : MethodChannel.MethodCallHandler, EventChannel.StreamHandler
 
                     is PermissionSubstrateRequest -> PermissionSubstrateResponse.from(
                         request,
-                        listOf(exampleSubstrateAccount(request.networks.first(), beaconClient))
+                        listOf(exampleSubstrateAccount(request.networks.first(), beaconClient)),
+                        beaconClient,
                     )
 
                     /* Others */
