@@ -37,30 +37,24 @@ class BeaconConnectService{
                     switch result {
                     case let .success(client):
                         print("Beacon client created")
-                        
-                        DispatchQueue.main.async {
-                            self.beaconClient = client
-                            self.listenForRequests()
-                            print("Fetching peers")
-                            self.beaconClient?.getPeers { result2 in
-                                switch result2 {
-                                case let .success(peers):
-                                    print("Peers fetched")
-                                    
-                                    if(peers.count > 0){
-                                        promise(.success(()))
-                                    }else{
-                                        print("Peer count is 0")
-                                        promise(.failure(Beacon.Error.missingPairedPeer))
-                                    }
-                                    
-                                case let .failure(error):
-                                    print("Failed to fetch peers, got error: \(error)")
-                                    promise(.failure(error))
+                        self.beaconClient = client
+                        self.beaconClient?.listen(onRequest: self.onBeaconRequest)
+                        print("Fetching peers")
+                        self.beaconClient?.getPeers { result2 in
+                        switch result2 {
+                            case let .success(peers):
+                                print("Peers fetched")
+                                if(peers.count > 0){
+                                    promise(.success(()))
+                                }else{
+                                    print("Peer count is 0")
+                                    promise(.failure(Beacon.Error.missingPairedPeer))
                                 }
+                            case let .failure(error):
+                                print("Failed to fetch peers, got error: \(error)")
+                                promise(.failure(error))
                             }
-                        }
-                        
+                       }
                     case let .failure(error):
                         print("Could not create Beacon client, got error: \(error)")
                         promise(.failure(error))
