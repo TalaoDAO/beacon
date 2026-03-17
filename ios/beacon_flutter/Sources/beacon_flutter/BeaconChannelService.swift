@@ -34,6 +34,7 @@ class BeaconConnectService{
                         connections: [try Transport.P2P.Matrix.connection()]
                     )
                 ) { result in
+                    print(result)
                     switch result {
                     case let .success(client):
                         print("Beacon client created")
