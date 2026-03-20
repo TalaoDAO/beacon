@@ -7,6 +7,7 @@ import BeaconCore
 import Base58Swift
 import BeaconBlockchainSubstrate
 import Flutter
+import os.log
 
 
 typealias Completion<T> = (Result<T, Error>) -> Void
@@ -67,6 +68,7 @@ class BeaconConnectService{
                 promise(.failure(error))
             }
         }
+        .timeout(.seconds(10), scheduler: DispatchQueue.main, customError: { AppError.CONNECTION_NOT_ESTABLISHED })
         .eraseToAnyPublisher()
     }
     
@@ -505,4 +507,5 @@ extension BroadcastTezosRequest {
 enum AppError: String, Error {
     case INVALID_ID
     case INVALID_REQUEST
+    case CONNECTION_NOT_ESTABLISHED = "connection not established"
 }
